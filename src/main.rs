@@ -15,7 +15,7 @@ mod stdout;
 
 use std::any::Any;
 use std::ffi::OsString;
-use std::io::{self, BufWriter};
+use std::io::{self, BufWriter, Write};
 use std::panic::{self, AssertUnwindSafe};
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
@@ -82,9 +82,9 @@ fn fail(code: u8, reason: &str) -> ExitCode {
 fn run(args: &[OsString]) -> Result<(), Fault> {
     let args = match parse(args)? {
         Command::Version => {
-            // The bare version, which the release compares with its tag's.
-            println!("{}", env!("CARGO_PKG_VERSION"));
-            return Ok(());
+            // The bare version, which the release compares with its tag's. Written, not
+            // println!ed, so a stdout that can't take it exits 1 rather than panicking.
+            return writeln!(io::stdout(), "{}", env!("CARGO_PKG_VERSION")).map_err(Fault::Output);
         }
         Command::Read(args) => args,
     };

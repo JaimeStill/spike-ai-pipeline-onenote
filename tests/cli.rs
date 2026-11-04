@@ -225,14 +225,19 @@ fn notebooks_and_packages_are_recognised() {
     }
 }
 
-/// A stdout that can't be written exits 1 with one error line.
+/// A stdout that can't be written exits 1 with one error line, for a read and for --version.
 #[test]
 fn an_unwritable_stdout_exits_1() {
-    let full = File::options().write(true).open("/dev/full").unwrap();
-    let out = run_to(full, &[fixture(DESKTOP)]);
-    assert_eq!(out.code, Some(1));
-    assert_eq!(
-        out.stderr,
-        format!("{NAME}: error: stdout can't be written: No space left on device (os error 28)\n")
-    );
+    for args in [fixture(DESKTOP).into_os_string(), "--version".into()] {
+        let full = File::options().write(true).open("/dev/full").unwrap();
+        let out = run_to(full, &[&args]);
+        assert_eq!(out.code, Some(1), "{args:?}");
+        assert_eq!(
+            out.stderr,
+            format!(
+                "{NAME}: error: stdout can't be written: No space left on device (os error 28)\n"
+            ),
+            "{args:?}"
+        );
+    }
 }
