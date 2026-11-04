@@ -101,6 +101,10 @@ pub struct Page {
     /// The page's recognised ink text: its recognition's lines, each a list of words.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub ink_text: Vec<Vec<Word>>,
+    /// The page as Markdown, rendered from the fields above (src/markdown.rs); none when
+    /// nothing on the page renders.
+    #[serde(skip_serializing_if = "String::is_empty")]
+    pub markdown: String,
 }
 
 /// An ink drawing, written as one SVG.

@@ -14,6 +14,7 @@ use typed_path::{PathType, TypedPath};
 use crate::content;
 use crate::guard::{Failure, guarded};
 use crate::jsonl::Lines;
+use crate::markdown;
 use crate::media::Media;
 use crate::model::{self, SCHEMA};
 use crate::{Fault, notebook, warn};
@@ -95,7 +96,7 @@ fn page_line(
 ) -> Result<model::Page, Fault> {
     let id = guid(page.link_target_id());
     let read = content::page(page, media, &format!("{place}, page {id}"))?;
-    Ok(model::Page {
+    let mut line = model::Page {
         line: "page",
         id,
         section: section.to_owned(),
@@ -107,7 +108,10 @@ fn page_line(
         content: read.content,
         ink: read.ink,
         ink_text: ink_text(page),
-    })
+        markdown: String::new(),
+    };
+    line.markdown = markdown::page(&line);
+    Ok(line)
 }
 
 /// A page's recognised ink text: its recognition's lines of words, each word its best guess,

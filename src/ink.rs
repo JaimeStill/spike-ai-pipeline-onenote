@@ -14,7 +14,7 @@ use onenote_parser::contents::{EmbeddedObject, Ink, InkStroke};
 use crate::model::Bounds;
 
 /// Ink units, 0.01 mm each, in the half inch that offsets count in.
-const UNITS_PER_HALF_INCH: f32 = 1270.0;
+pub const UNITS_PER_HALF_INCH: f32 = 1270.0;
 
 /// One stroke, its points absolute and in ink units.
 #[derive(Clone, Debug, PartialEq)]

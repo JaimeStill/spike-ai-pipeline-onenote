@@ -10,6 +10,7 @@ mod content;
 mod guard;
 mod ink;
 mod jsonl;
+mod markdown;
 mod math;
 mod media;
 mod model;
