@@ -49,7 +49,8 @@ fn every_public_section_has_an_expectation() {
 }
 
 /// Each section reads as its expectation says: its exit code, and either its refusal's reason,
-/// or a notebook line, its section line, and a page line per expected page, in order.
+/// or a notebook line, its section line, and a page line per expected page, in order, each
+/// with its containers counted by kind.
 #[test]
 fn every_public_section_reads_as_expected() {
     for expected in expectations() {
@@ -97,6 +98,7 @@ fn every_public_section_reads_as_expected() {
             for field in PAGE_FIELDS {
                 assert_eq!(line.get(field), page.get(field), "{file}: {field}");
             }
+            assert_eq!(kind_counts(line), page["content"], "{file}: content");
         }
     }
 }
@@ -121,6 +123,17 @@ fn every_read_keeps_the_line_rules_and_repeats_byte_for_byte() {
             }
         }
     }
+}
+
+/// A page line's containers counted by kind, as {"outline": 2, ...}.
+fn kind_counts(page: &Value) -> Value {
+    let mut counts = serde_json::Map::new();
+    for container in page["content"].as_array().into_iter().flatten() {
+        let kind = container["kind"].as_str().unwrap().to_owned();
+        let count = counts.get(&kind).and_then(Value::as_u64).unwrap_or(0);
+        counts.insert(kind, json!(count + 1));
+    }
+    Value::Object(counts)
 }
 
 fn assert_no_empty(value: &Value, file: &str) {

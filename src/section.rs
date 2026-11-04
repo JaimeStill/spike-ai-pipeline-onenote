@@ -11,6 +11,7 @@ use onenote_parser::page::Page;
 use onenote_parser::property::common::Color;
 use typed_path::{PathType, TypedPath};
 
+use crate::content;
 use crate::guard::{Failure, guarded};
 use crate::jsonl::Lines;
 use crate::model::{self, SCHEMA};
@@ -85,6 +86,7 @@ fn page_line(page: &Page, section: &str) -> model::Page {
         creation_time: iso8601(page.created_time()),
         modification_time: iso8601(page.updated_time()),
         author: text(page.author()),
+        content: content::page(page),
     }
 }
 
@@ -115,7 +117,7 @@ fn hex(color: Color) -> Option<String> {
 }
 
 /// A time as ISO 8601 UTC, to the second; a fraction of a second is cut, not rounded.
-fn iso8601(time: time::UtcDateTime) -> String {
+pub fn iso8601(time: time::UtcDateTime) -> String {
     format!(
         "{:04}-{:02}-{:02}T{:02}:{:02}:{:02}Z",
         time.year(),

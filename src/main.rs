@@ -6,6 +6,7 @@
 //! media directory; 2 a usage error; 3 an input refused before any output; 4 a fault of the
 //! CLI's own.
 
+mod content;
 mod guard;
 mod jsonl;
 mod model;
