@@ -65,6 +65,46 @@ pub struct Page {
     /// The page's containers, its title first, then the rest in stored order.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub content: Vec<Container>,
+    /// The page's own ink, every ink container's strokes in one drawing at their offsets; none
+    /// when the page has no strokes.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ink: Option<Ink>,
+    /// The page's recognised ink text: its recognition's lines, each a list of words.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub ink_text: Vec<Vec<Word>>,
+}
+
+/// An ink drawing, written as one SVG.
+#[derive(Serialize, Debug)]
+pub struct Ink {
+    /// Its SVG's name in the media directory.
+    pub file: String,
+    pub strokes: usize,
+    /// The box its strokes' points span, before their pens' width is added.
+    pub bounds: Bounds,
+}
+
+/// A box in ink units, 0.01 mm each. A page's ink is placed from the page's origin, so its
+/// bounds are in the page's coordinates; ink in a paragraph or an outline is in its own.
+#[derive(Serialize, Clone, Copy, Debug, PartialEq)]
+pub struct Bounds {
+    pub x: f32,
+    pub y: f32,
+    pub width: f32,
+    pub height: f32,
+}
+
+/// A word OneNote recognised in a page's ink.
+#[derive(Serialize)]
+pub struct Word {
+    /// The recogniser's best guess.
+    pub text: String,
+    /// Its other guesses, best first.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub alternatives: Vec<String>,
+    /// The language it was recognised in, as a Windows LCID: 1031 is German (Germany).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language: Option<u16>,
 }
 
 /// A container on a page, its "kind" naming it. Offsets are from the page's origin, in
@@ -97,8 +137,15 @@ pub enum Container {
         #[serde(flatten)]
         file: EmbeddedFile,
     },
-    // Ink carries its offsets alone until it's read.
-    Ink(Offsets),
+    /// One stored ink container: its strokes, drawn in the page's ink, and the box they span
+    /// on the page, which strokes without points don't have.
+    Ink {
+        #[serde(flatten)]
+        offsets: Offsets,
+        strokes: usize,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        bounds: Option<Bounds>,
+    },
 }
 
 #[derive(Serialize)]
@@ -135,8 +182,11 @@ pub enum Block {
     Table(Table),
     Image(Image),
     EmbeddedFile(EmbeddedFile),
-    // Ink inside an outline is named, not yet read.
-    Ink,
+    /// Ink in an outline, drawn alone; ink with no strokes has no drawing.
+    Ink {
+        #[serde(flatten)]
+        ink: Option<Ink>,
+    },
 }
 
 /// An image. Its file is the name of its content in the media directory; an image whose data
@@ -196,6 +246,10 @@ pub struct Paragraph {
     /// The visible runs, in order; hidden runs are left out.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub runs: Vec<Run>,
+    /// The paragraph's handwriting, its inks laid out as they read in one drawing. The parser
+    /// gives such a paragraph no text, so it has no runs.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ink: Option<Ink>,
 }
 
 /// A list marker: a bullet, or a number with its format and the text around it.

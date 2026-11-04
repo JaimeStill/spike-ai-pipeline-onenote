@@ -88,7 +88,7 @@ fn page_line(
 ) -> Result<model::Page, Fault> {
     let text = |value: Option<&str>| value.filter(|text| !text.is_empty()).map(str::to_owned);
     let id = guid(page.link_target_id());
-    let content = content::page(page, media, &format!("{place}, page {id}"))?;
+    let read = content::page(page, media, &format!("{place}, page {id}"))?;
     Ok(model::Page {
         line: "page",
         id,
@@ -98,8 +98,36 @@ fn page_line(
         creation_time: iso8601(page.created_time()),
         modification_time: iso8601(page.updated_time()),
         author: text(page.author()),
-        content,
+        content: read.content,
+        ink: read.ink,
+        ink_text: ink_text(page),
     })
+}
+
+/// A page's recognised ink text: its recognition's lines of words, each word its best guess,
+/// its other guesses and its language. A word with no guess is left out.
+fn ink_text(page: &Page) -> Vec<Vec<model::Word>> {
+    let Some(recognition) = page.ink_recognition() else {
+        return Vec::new();
+    };
+    recognition
+        .lines()
+        .iter()
+        .map(|line| {
+            line.words()
+                .iter()
+                .filter_map(|word| {
+                    let (best, rest) = word.alternatives().split_first()?;
+                    Some(model::Word {
+                        text: best.clone(),
+                        alternatives: rest.to_vec(),
+                        language: word.language_id(),
+                    })
+                })
+                .collect::<Vec<_>>()
+        })
+        .filter(|words| !words.is_empty())
+        .collect()
 }
 
 /// A section's place in a warning: its path from the notebook's root, "/Group/Section", with

@@ -8,6 +8,7 @@
 
 mod content;
 mod guard;
+mod ink;
 mod jsonl;
 mod media;
 mod model;

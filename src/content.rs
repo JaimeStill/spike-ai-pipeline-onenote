@@ -1,6 +1,6 @@
 //! A page's content: its title and its containers, mapped from onenote_parser's model into
-//! schema "1"'s, with outline items nested as stored, paragraphs split into runs, and images'
-//! and embedded files' contents named, and written, by the media directory.
+//! schema "1"'s, with outline items nested as stored, paragraphs split into runs, and images',
+//! embedded files' and ink drawings' contents named, and written, by the media directory.
 
 use std::io::Read;
 use std::ops::Range;
@@ -13,22 +13,31 @@ use onenote_parser::page::{Page, PageContent};
 use onenote_parser::property::common::ColorRef;
 use onenote_parser::property::embedded_file::FileType;
 
+use crate::ink::{self, Stroke};
 use crate::media::{self, Media};
 use crate::model::{self, Block, Container, Item, Offsets};
 use crate::section::iso8601;
 use crate::{Fault, warn};
 
+/// A page's content and its own ink.
+pub struct PageRead {
+    pub content: Vec<Container>,
+    pub ink: Option<model::Ink>,
+}
+
 /// The page's title, when it has one, then its containers in stored order. A container of a
-/// kind onenote_parser doesn't know is left out. Images' and embedded files' contents go to
-/// `media` as they are read, so each is written before the page line that names it; `place`
-/// names the page in warnings.
-pub fn page(page: &Page, media: &mut Media, place: &str) -> Result<Vec<Container>, Fault> {
+/// kind onenote_parser doesn't know is left out. Images', embedded files' and ink drawings'
+/// contents go to `media` as they are read, so each is written before the page line that
+/// names it; `place` names the page in warnings. The page's own ink, the strokes of all its
+/// ink containers, is one drawing, stored after the rest.
+pub fn page(page: &Page, media: &mut Media, place: &str) -> Result<PageRead, Fault> {
     let mut reader = Reader {
         media,
         place,
         images: 0,
         files: 0,
     };
+    let mut page_strokes = Vec::new();
     let mut containers = Vec::new();
     if let Some(title) = page.title() {
         let mut items = Vec::new();
@@ -63,14 +72,28 @@ pub fn page(page: &Page, media: &mut Media, place: &str) -> Result<Vec<Container
                 },
                 file: reader.embedded_file(file)?,
             },
-            PageContent::Ink(ink) => Container::Ink(Offsets {
-                offset_horizontal: ink.offset_horizontal(),
-                offset_vertical: ink.offset_vertical(),
-            }),
+            PageContent::Ink(ink) => {
+                let mut strokes = Vec::new();
+                ink::strokes(ink, true, &mut strokes);
+                let container = Container::Ink {
+                    offsets: Offsets {
+                        offset_horizontal: ink.offset_horizontal(),
+                        offset_vertical: ink.offset_vertical(),
+                    },
+                    strokes: strokes.len(),
+                    bounds: ink::extent(&strokes),
+                };
+                page_strokes.extend(strokes);
+                container
+            }
             PageContent::Unknown => continue,
         });
     }
-    Ok(containers)
+    let ink = reader.drawing(&page_strokes)?;
+    Ok(PageRead {
+        content: containers,
+        ink,
+    })
 }
 
 fn outline_offsets(outline: &Outline) -> Offsets {
@@ -112,12 +135,23 @@ impl Reader<'_> {
             blocks.push(match content {
                 Content::RichText(text) => {
                     let marker = if index == 0 { list.take() } else { None };
-                    Block::Paragraph(paragraph(text, marker))
+                    let mut paragraph = paragraph(text, marker);
+                    if !text.embedded_objects().is_empty() {
+                        let strokes = ink::flow(ink::pieces(text.embedded_objects()));
+                        paragraph.ink = self.drawing(&strokes)?;
+                    }
+                    Block::Paragraph(paragraph)
                 }
                 Content::Table(table) => Block::Table(self.table(table)?),
                 Content::Image(image) => Block::Image(self.image(image)?),
                 Content::EmbeddedFile(file) => Block::EmbeddedFile(self.embedded_file(file)?),
-                Content::Ink(_) => Block::Ink,
+                Content::Ink(drawn) => {
+                    let mut strokes = Vec::new();
+                    ink::strokes(drawn, false, &mut strokes);
+                    Block::Ink {
+                        ink: self.drawing(&strokes)?,
+                    }
+                }
                 Content::Unknown => continue,
             });
         }
@@ -199,6 +233,19 @@ impl Reader<'_> {
         })
     }
 
+    /// A drawing of `strokes`: its SVG stored in the media, and its record. Strokes with no
+    /// points draw nothing and have none.
+    fn drawing(&mut self, strokes: &[Stroke]) -> Result<Option<model::Ink>, Fault> {
+        let Some((svg, bounds)) = ink::svg(strokes) else {
+            return Ok(None);
+        };
+        Ok(Some(model::Ink {
+            file: self.media.store(&svg, Some("svg"))?,
+            strokes: strokes.len(),
+            bounds,
+        }))
+    }
+
     /// A record's file: its content stored in the media and named. Data that is missing,
     /// invalid, or can't be read gives no file and a warning at `place`.
     fn file(
@@ -239,6 +286,7 @@ fn paragraph(text: &RichText, list: Option<model::List>) -> model::Paragraph {
         list,
         tags: tags(text.note_tags()),
         runs: runs(text),
+        ink: None,
     }
 }
 

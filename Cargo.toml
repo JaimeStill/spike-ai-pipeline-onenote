@@ -24,3 +24,5 @@ sha2 = "0.11.1"
 [dev-dependencies]
 # utc_datetime!, for the unit tests' times.
 time = { version = "0.3.55", features = ["macros"] }
+# An XML reader, so the tests check each ink SVG is well-formed; the CLI writes SVG itself.
+roxmltree = "0.21.2"

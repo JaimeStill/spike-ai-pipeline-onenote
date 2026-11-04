@@ -142,7 +142,8 @@ fn the_test_pages_image() {
 
 /// With --media, the directory is created, nested, and holds exactly the files the model
 /// names, each once, its SHA-256 its name and its size the record's. The lines are the same
-/// as without --media.
+/// as without --media. The pages' ink drawings are among the files named; tests/ink.rs checks
+/// them.
 #[test]
 fn media_files_are_named_by_their_sha256() {
     for file in WITH_MEDIA {
@@ -159,6 +160,7 @@ fn media_files_are_named_by_their_sha256() {
         let mut names: Vec<String> = records
             .iter()
             .map(|r| r["file"].as_str().unwrap().to_owned())
+            .chain(drawings(&out.lines()))
             .collect();
         names.sort_unstable();
         names.dedup();
@@ -174,10 +176,21 @@ fn media_files_are_named_by_their_sha256() {
     }
 }
 
-/// The same content read twice into one directory is one file there.
+/// The files of the pages' ink drawings a read names.
+fn drawings(lines: &[Value]) -> Vec<String> {
+    lines
+        .iter()
+        .filter_map(|line| line["ink"]["file"].as_str())
+        .map(str::to_owned)
+        .collect()
+}
+
+/// The same content read twice into one directory is one file there. The two pages' ink
+/// drawings differ, so each is a file of its own.
 #[test]
 fn a_repeated_content_is_one_file() {
     let dir = scratch("media-repeated");
+    let mut expected = vec![format!("{SCREENSHOT}.jpg")];
     for file in [
         "onenote-rs/New Section 1.one",
         "onenote-rs/handwriting_recognition.one",
@@ -188,8 +201,11 @@ fn a_repeated_content_is_one_file() {
             dir.as_os_str(),
         ]);
         assert_eq!(out.code, Some(0), "{file}: {}", out.stderr);
+        expected.extend(drawings(&out.lines()));
     }
-    assert_eq!(files_under(&dir), [format!("{SCREENSHOT}.jpg")]);
+    expected.sort_unstable();
+    assert_eq!(expected.len(), 3);
+    assert_eq!(files_under(&dir), expected);
 }
 
 /// A media directory that can't be created exits 1 with one error line, and the page line
