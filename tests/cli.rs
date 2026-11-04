@@ -201,28 +201,31 @@ fn the_parsers_own_printing_never_reaches_stdout() {
     );
 }
 
-/// A .onetoc2, by its content whatever its name, a notebook directory and a cabinet are
-/// recognised as a notebook or a package, which this version refuses as not read yet.
+/// A .onetoc2, by its content whatever its name, and a notebook directory are read as a
+/// notebook, and a cabinet as a package: one the parser can't read is refused with its reason.
 #[test]
 fn notebooks_and_packages_are_recognised() {
-    let toc = std::fs::read(fixture("onenote-rs/Open Notebook.onetoc2")).unwrap();
+    let toc = std::fs::read(fixture("onenote-rs/non-legacy/Open Notebook.onetoc2")).unwrap();
     let toc_as_section = built("Notebook.one", &toc);
     let notebook = fixture("onenote-rs/non-legacy");
-    let cabinet = built("Notebook.onepkg", b"MSCF\0\0\0\0");
-    let cases = [
-        (toc_as_section.clone(), toc_as_section),
-        (notebook.clone(), notebook.join("Open Notebook.onetoc2")),
-        (cabinet.clone(), cabinet),
-    ];
-    for (input, named) in cases {
-        let out = run(&[&input]);
-        assert_eq!(out.code, Some(3), "{}", input.display());
-        assert_eq!(out.stdout, "", "{}", input.display());
-        assert_eq!(
-            out.stderr,
-            error(&named, "notebook and package inputs are not read yet")
-        );
+    for input in [&toc_as_section, &notebook] {
+        let out = run(&[input]);
+        assert_eq!(out.code, Some(0), "{}: {}", input.display(), out.stderr);
+        let first = &out.lines()[0];
+        assert_eq!(first["input"], "notebook", "{}", input.display());
+        assert_eq!(first["id"], "f1da443f-a65f-4513-b200-78d8a9910b8d");
     }
+    let cabinet = built("Notebook.onepkg", b"MSCF\0\0\0\0");
+    let out = run(&[&cabinet]);
+    assert_eq!(out.code, Some(3));
+    assert_eq!(out.stdout, "");
+    assert_eq!(
+        out.stderr,
+        error(
+            &cabinet,
+            "Malformed OneNote package: failed to read cabinet: failed to fill whole buffer"
+        )
+    );
 }
 
 /// A stdout that can't be written exits 1 with one error line, for a read and for --version.

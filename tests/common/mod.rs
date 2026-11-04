@@ -10,6 +10,8 @@ use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
+use serde_json::Value;
+
 const BIN: &str = env!("CARGO_BIN_EXE_spike-ai-pipeline-onenote");
 
 /// The prefix of every error and warning line.
@@ -24,7 +26,7 @@ pub struct Run {
 
 impl Run {
     /// stdout's lines, each parsed as JSON.
-    pub fn lines(&self) -> Vec<serde_json::Value> {
+    pub fn lines(&self) -> Vec<Value> {
         self.stdout
             .lines()
             .map(|line| serde_json::from_str(line).expect("each stdout line is JSON"))
@@ -121,4 +123,68 @@ pub fn files_under(dir: &Path) -> Vec<String> {
     }
     found.sort_unstable();
     found
+}
+
+/// The rules every line keeps: a JSON object whose `line` field names its kind, with no null,
+/// empty string, empty list or empty object anywhere in it but an empty table cell, `{}`, which
+/// holds its place in its row; and every time ISO 8601 UTC to the second. `file` names the
+/// input in failures.
+pub fn assert_line_rules(line: &Value, file: &str) {
+    assert!(line["line"].is_string(), "{file}: {line}");
+    assert_no_empty(line, file);
+    for field in ["creation_time", "modification_time"] {
+        if let Some(time) = line.get(field) {
+            assert!(is_iso8601_second(time.as_str().unwrap()), "{file}: {time}");
+        }
+    }
+}
+
+fn assert_no_empty(value: &Value, file: &str) {
+    match value {
+        Value::Null => panic!("{file}: a null"),
+        Value::String(text) => assert!(!text.is_empty(), "{file}: an empty string"),
+        Value::Array(items) => {
+            assert!(!items.is_empty(), "{file}: an empty list");
+            items.iter().for_each(|item| assert_no_empty(item, file));
+        }
+        Value::Object(fields) => {
+            assert!(!fields.is_empty(), "{file}: an empty object");
+            for (name, field) in fields {
+                if value["kind"] == "table" && name == "rows" {
+                    assert_no_empty_rows(field, file);
+                } else {
+                    assert_no_empty(field, file);
+                }
+            }
+        }
+        Value::Bool(_) | Value::Number(_) => {}
+    }
+}
+
+/// A table's rows: no row is empty, and a cell may be the empty object, as an empty cell is.
+fn assert_no_empty_rows(rows: &Value, file: &str) {
+    let rows = rows.as_array().unwrap();
+    assert!(!rows.is_empty(), "{file}: a table without rows");
+    for row in rows {
+        let cells = row.as_array().unwrap();
+        assert!(!cells.is_empty(), "{file}: an empty row");
+        for cell in cells {
+            if cell.as_object().is_none_or(|fields| !fields.is_empty()) {
+                assert_no_empty(cell, file);
+            }
+        }
+    }
+}
+
+/// Whether `time` has the form 2020-10-27T10:47:23Z.
+fn is_iso8601_second(time: &str) -> bool {
+    let bytes = time.as_bytes();
+    bytes.len() == 20
+        && bytes.iter().enumerate().all(|(i, &b)| match i {
+            4 | 7 => b == b'-',
+            10 => b == b'T',
+            13 | 16 => b == b':',
+            19 => b == b'Z',
+            _ => b.is_ascii_digit(),
+        })
 }

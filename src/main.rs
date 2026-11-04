@@ -13,6 +13,7 @@ mod jsonl;
 mod math;
 mod media;
 mod model;
+mod notebook;
 mod section;
 mod sniff;
 mod stdout;
@@ -21,7 +22,7 @@ use std::any::Any;
 use std::ffi::OsString;
 use std::io::{self, BufWriter, Write};
 use std::panic::{self, AssertUnwindSafe};
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::process::ExitCode;
 
 use jsonl::Lines;
@@ -99,8 +100,8 @@ fn run(args: &[OsString]) -> Result<(), Fault> {
     let mut media = Media::new(args.media);
     match input {
         Input::OneStore => section::read(path, &mut media, &mut out)?,
-        Input::Directory(toc) => return Err(notebook_unread(&toc)),
-        Input::Package => return Err(notebook_unread(path)),
+        Input::Directory(toc) => notebook::read(&toc, &mut media, &mut out)?,
+        Input::Package => notebook::read_package(path, &mut media, &mut out)?,
     }
     out.flush().map_err(Fault::Output)
 }
@@ -109,14 +110,6 @@ fn run(args: &[OsString]) -> Result<(), Fault> {
 /// what happened to it.
 pub fn warn(place: &str, what: &str) {
     eprintln!("{NAME}: warning: {place}: {what}");
-}
-
-/// The refusal of a notebook, a notebook directory, or a package, which aren't read yet.
-pub fn notebook_unread(path: &Path) -> Fault {
-    Fault::Refused(format!(
-        "{}: notebook and package inputs are not read yet",
-        path.display()
-    ))
 }
 
 /// Parses the arguments by hand: `--version` alone, or one input and an optional

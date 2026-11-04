@@ -16,15 +16,15 @@ use crate::guard::{Failure, guarded};
 use crate::jsonl::Lines;
 use crate::media::Media;
 use crate::model::{self, SCHEMA};
-use crate::{Fault, notebook_unread};
+use crate::{Fault, notebook, warn};
 
 /// Reads a OneStore input: a section's lines, or, when the parser finds a table of contents,
-/// the input handed on as a notebook.
+/// the notebook's.
 pub fn read(path: &Path, media: &mut Media, out: &mut Lines<impl Write>) -> Result<(), Fault> {
     let parser = Parser::new();
     let section = match guarded(|| parser.parse_section(typed(path))) {
         Ok(section) => section,
-        Err(Failure::Error(err)) if is_toc(&err) => return Err(notebook_unread(path)),
+        Err(Failure::Error(err)) if is_toc(&err) => return notebook::read(path, media, out),
         Err(failure) => {
             return Err(Fault::Refused(format!(
                 "{}: {}",
@@ -47,7 +47,8 @@ pub fn read(path: &Path, media: &mut Media, out: &mut Lines<impl Write>) -> Resu
 }
 
 /// Writes a section's line, under the group `parent` at the names `above`, then its pages in
-/// the order of its page series, each page's media stored before its line.
+/// the order of its page series, each page's media stored before its line. The warnings of the
+/// section's report go to stderr first.
 pub fn write(
     section: &onenote_parser::section::Section,
     parent: Option<&str>,
@@ -59,6 +60,12 @@ pub fn write(
     let mut path = above.to_vec();
     path.push(section.display_name().to_owned());
     let place = place(&path);
+    for warning in section.report().warnings() {
+        match warning.page() {
+            Some((page, _)) => warn(&format!("{place}, page {page}"), warning.message()),
+            None => warn(&place, warning.message()),
+        }
+    }
     out.write(&model::Section {
         line: "section",
         id: id.clone(),
@@ -132,7 +139,7 @@ fn ink_text(page: &Page) -> Vec<Vec<model::Word>> {
 
 /// A section's place in a warning: its path from the notebook's root, "/Group/Section", with
 /// control characters escaped so the warning stays one line.
-fn place(path: &[String]) -> String {
+pub fn place(path: &[String]) -> String {
     let mut place = String::new();
     for name in path {
         place.push('/');
@@ -154,7 +161,7 @@ fn is_toc(err: &Error) -> bool {
 }
 
 /// A host path as onenote_parser takes it, from its bytes, so a path that isn't UTF-8 reads.
-fn typed(path: &Path) -> TypedPath<'_> {
+pub fn typed(path: &Path) -> TypedPath<'_> {
     TypedPath::new(path.as_os_str().as_bytes(), PathType::Unix)
 }
 
@@ -169,7 +176,7 @@ fn guid(stored: &str) -> String {
 
 /// A colour as "#rrggbb". The parser turns MS-ONE 2.2.7's stored top byte into an alpha of
 /// 255 less it, so an alpha of 0 is the stored 0xFF of a COLORREF's "no colour", and has none.
-fn hex(color: Color) -> Option<String> {
+pub fn hex(color: Color) -> Option<String> {
     (color.alpha() != 0).then(|| format!("#{:02x}{:02x}{:02x}", color.r(), color.g(), color.b()))
 }
 

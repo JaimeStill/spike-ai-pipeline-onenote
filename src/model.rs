@@ -1,5 +1,6 @@
 //! The lines of schema "1". Each line is one JSON object whose "line" field names it: a notebook
-//! line first, then section lines, each followed by its page lines. Fields serialize in
+//! line first, then its section group and section lines depth-first, each section followed by
+//! its page lines, and a skipped line for each section the read left out. Fields serialize in
 //! declaration order, and a field with no value, or an empty one, is left out, never written as
 //! null.
 
@@ -24,6 +25,34 @@ pub struct Notebook {
     /// For a notebook or a package, its colour.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+}
+
+/// A section group of a notebook, written before the entries it holds.
+#[derive(Serialize)]
+pub struct SectionGroup {
+    pub line: &'static str,
+    /// The FileIdentity of the group's own .onetoc2.
+    pub id: String,
+    /// The id of the group this one is in; a group at the notebook's root has none.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent: Option<String>,
+    /// The display names from the notebook's root down to this group.
+    pub path: Vec<String>,
+    /// The group's directory name, which OneNote shows as its name.
+    #[serde(skip_serializing_if = "String::is_empty")]
+    pub display_name: String,
+}
+
+/// A record the read left out.
+#[derive(Serialize)]
+pub struct Skipped {
+    pub line: &'static str,
+    /// What was left out: "section".
+    pub kind: &'static str,
+    /// Its name as the notebook's table of contents gives it: a section's file name.
+    pub name: String,
+    /// Why, in the parser's words.
+    pub reason: String,
 }
 
 /// One section, written before its pages.
