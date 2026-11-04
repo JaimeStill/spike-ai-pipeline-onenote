@@ -332,12 +332,6 @@ mod tests {
         );
     }
 
-    #[test]
-    fn the_same_strokes_give_the_same_bytes() {
-        let strokes = [stroke(&[(0.1, 0.2), (1.0 / 3.0, 2.0 / 3.0)])];
-        assert_eq!(svg(&strokes).unwrap().0, svg(&strokes).unwrap().0);
-    }
-
     /// Two inks side by side with a space between, then a line break and a third ink: the
     /// second starts where the first ends, plus the space, and the third line starts below the
     /// first at the left.

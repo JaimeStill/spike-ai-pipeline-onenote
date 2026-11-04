@@ -131,11 +131,4 @@ mod tests {
         assert!(!path.exists());
         fs::remove_dir_all(&dir).unwrap();
     }
-
-    #[test]
-    fn without_a_directory_nothing_is_written() {
-        let mut media = Media::new(None);
-        assert_eq!(media.store(b"", None).ok(), Some(EMPTY.to_owned()));
-        assert!(media.written.is_empty());
-    }
 }

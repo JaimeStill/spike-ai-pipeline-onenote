@@ -820,11 +820,10 @@ mod tests {
         assert!(matches!(file, Ok(None)));
     }
 
+    /// The named formats are read from the fixtures in tests/content.rs; none holds a code
+    /// without a name.
     #[test]
-    fn number_formats_have_names() {
-        assert_eq!(number_format(0), "decimal");
-        assert_eq!(number_format(4), "lower-letter");
-        assert_eq!(number_format(2), "lower-roman");
+    fn a_number_format_without_a_name_is_its_code() {
         assert_eq!(number_format(60), "nfc-60");
     }
 }
