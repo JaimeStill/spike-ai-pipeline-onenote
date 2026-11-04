@@ -448,7 +448,7 @@ impl Inline {
 /// line's start, `line_start`, a first `-`, `=`, `+`, `#` or `>` is escaped, and so is the `.`
 /// or `)` after one to nine digits, so no line reads as a heading, a rule, a quote or a list
 /// item. `$` is escaped as well, since this Markdown writes math between `$`s.
-pub fn escape(text: &str, line_start: bool) -> String {
+fn escape(text: &str, line_start: bool) -> String {
     let mut out = String::with_capacity(text.len() + 8);
     let mut chars = text.char_indices().peekable();
     if line_start {
