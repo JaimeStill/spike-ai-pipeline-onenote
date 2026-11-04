@@ -1,6 +1,6 @@
 [package]
 name = "spike-ai-pipeline-onenote"
-version = "0.0.0"
+version = "0.1.0"
 edition = "2024"
 license = "Apache-2.0"
 description = "The OneNote CLI of spike-ai-pipeline: OneNote sections, packages, and notebooks to a JSON model"
