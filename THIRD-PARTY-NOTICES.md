@@ -7,7 +7,8 @@ source repository.
 
 The components are the binary's runtime crates, as `Cargo.lock` pins them, the code ported from
 one2html, the Rust standard library, and musl libc. Crates used only to build (procedural macros)
-or only in the tests are not in the binary and are not listed. A crate offered under a choice of
+or only in the tests are not in the binary and are not listed; `scripts/notices.sh`, which the
+check runs, holds the list to the crates either target links. A crate offered under a choice of
 licences is taken here under the MIT License; the one exception, foldhash, is offered under the
 zlib License alone.
 
@@ -213,6 +214,7 @@ core_detect is in the linux-x64 binary only.
 | sha2 | 0.11.1 | MIT OR Apache-2.0 | Copyright (c) 2006-2009 Graydon Hoare; Copyright (c) 2009-2013 Mozilla Foundation; Copyright (c) 2016-2026 The RustCrypto Project Developers; Copyright (c) 2016 Artyom Pavlov |
 | simd-adler32 | 0.3.10 | MIT | Copyright (c) 2021 Marvin Countryman |
 | simdutf8 | 0.1.5 | MIT OR Apache-2.0 | The simdutf8 authors (Hans Kratz) |
+| thiserror | 2.0.21 | MIT OR Apache-2.0 | The thiserror authors (David Tolnay) |
 | time | 0.3.55 | MIT OR Apache-2.0 | Copyright (c) Jacob Pratt et al. |
 | time-core | 0.1.9 | MIT OR Apache-2.0 | Copyright (c) Jacob Pratt et al. |
 | typed-path | 0.12.4 | MIT OR Apache-2.0 | The typed-path authors (Chip Senkbeil) |

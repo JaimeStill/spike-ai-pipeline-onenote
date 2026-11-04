@@ -1,6 +1,6 @@
 # Project kind: this layer holds the Rust OneNote CLI, checked by `mise run check` (shellcheck,
-# rustfmt, clippy with warnings denied, tests, and a static musl release build). Its goals live in
-# the coordinator's roadmap (standards-lab/context/roadmap.toml), under
+# rustfmt, clippy with warnings denied, the third-party notices against the linked crates, tests,
+# and a static musl release build). Its goals live in the coordinator's roadmap (standards-lab/context/roadmap.toml), under
 # experiment.ai.spike-ai-pipeline. `mise run currency` reports every crate, mise tool, and GitHub
 # Action pin behind its latest. No gate.
 [project]

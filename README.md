@@ -354,12 +354,13 @@ and the time and peak resident memory of every input, median of 3:
 
 ## Development
 
-`mise run check` lints, format-checks, tests, and builds the static musl release binary; CI runs
-it on linux-x64 and linux-arm64, on every pull request into main and every push to main.
-`scripts/release-pack.sh <target> <tag>` builds and packs one release archive, refusing a tag
-that isn't the binary's version; the release workflow runs it on each architecture for a pushed
-`vX.Y.Z` tag. `mise run currency` reports every crate, mise tool, and Action pin behind its latest.
-`mise run findings` runs the finding
+`mise run check` lints, format-checks, checks that `THIRD-PARTY-NOTICES.md` names exactly the
+crates the release binary links at their locked versions (`scripts/notices.sh`), tests, and
+builds the static musl release binary; CI runs it on linux-x64 and linux-arm64, on every pull
+request into main and every push to main. `scripts/release-pack.sh <target> <tag>` builds and
+packs one release archive, refusing a tag that isn't the binary's version; the release workflow
+runs it on each architecture for a pushed `vX.Y.Z` tag. `mise run currency` reports every crate,
+mise tool, and Action pin behind its latest. `mise run findings` runs the finding
 ([`docs/findings/onenote-cli.md`](docs/findings/onenote-cli.md), "Rerunning").
 
 ## Licence
