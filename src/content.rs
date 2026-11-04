@@ -1,51 +1,76 @@
 //! A page's content: its title and its containers, mapped from onenote_parser's model into
-//! schema "1"'s, with outline items nested as stored and paragraphs split into runs.
+//! schema "1"'s, with outline items nested as stored, paragraphs split into runs, and images'
+//! and embedded files' contents named, and written, by the media directory.
 
+use std::io::Read;
 use std::ops::Range;
 
 use onenote_parser::contents::{
-    Content, List, NoteTag, Outline, OutlineElement, OutlineItem, ParagraphStyling, RichText, Table,
+    Content, EmbeddedFile, FileDataStatus, Image, List, NoteTag, Outline, OutlineElement,
+    OutlineItem, ParagraphStyling, RichText, Table,
 };
 use onenote_parser::page::{Page, PageContent};
 use onenote_parser::property::common::ColorRef;
+use onenote_parser::property::embedded_file::FileType;
 
+use crate::media::{self, Media};
 use crate::model::{self, Block, Container, Item, Offsets};
 use crate::section::iso8601;
+use crate::{Fault, warn};
 
 /// The page's title, when it has one, then its containers in stored order. A container of a
-/// kind onenote_parser doesn't know is left out.
-pub fn page(page: &Page) -> Vec<Container> {
-    let title = page.title().map(|title| Container::Title {
-        offsets: Offsets {
-            offset_horizontal: Some(title.offset_horizontal()),
-            offset_vertical: Some(title.offset_vertical()),
-        },
-        items: title
-            .contents()
-            .iter()
-            .flat_map(|outline| items(outline.items()))
-            .collect(),
-    });
-    let containers = page.contents().iter().filter_map(|content| match content {
-        PageContent::Outline(outline) => Some(Container::Outline {
-            offsets: outline_offsets(outline),
-            items: items(outline.items()),
-        }),
-        PageContent::Image(image) => Some(Container::Image(Offsets {
-            offset_horizontal: image.offset_horizontal(),
-            offset_vertical: image.offset_vertical(),
-        })),
-        PageContent::EmbeddedFile(file) => Some(Container::EmbeddedFile(Offsets {
-            offset_horizontal: file.offset_horizontal(),
-            offset_vertical: file.offset_vertical(),
-        })),
-        PageContent::Ink(ink) => Some(Container::Ink(Offsets {
-            offset_horizontal: ink.offset_horizontal(),
-            offset_vertical: ink.offset_vertical(),
-        })),
-        PageContent::Unknown => None,
-    });
-    title.into_iter().chain(containers).collect()
+/// kind onenote_parser doesn't know is left out. Images' and embedded files' contents go to
+/// `media` as they are read, so each is written before the page line that names it; `place`
+/// names the page in warnings.
+pub fn page(page: &Page, media: &mut Media, place: &str) -> Result<Vec<Container>, Fault> {
+    let mut reader = Reader {
+        media,
+        place,
+        images: 0,
+        files: 0,
+    };
+    let mut containers = Vec::new();
+    if let Some(title) = page.title() {
+        let mut items = Vec::new();
+        for outline in title.contents() {
+            items.extend(reader.items(outline.items())?);
+        }
+        containers.push(Container::Title {
+            offsets: Offsets {
+                offset_horizontal: Some(title.offset_horizontal()),
+                offset_vertical: Some(title.offset_vertical()),
+            },
+            items,
+        });
+    }
+    for content in page.contents() {
+        containers.push(match content {
+            PageContent::Outline(outline) => Container::Outline {
+                offsets: outline_offsets(outline),
+                items: reader.items(outline.items())?,
+            },
+            PageContent::Image(image) => Container::Image {
+                offsets: Offsets {
+                    offset_horizontal: image.offset_horizontal(),
+                    offset_vertical: image.offset_vertical(),
+                },
+                image: reader.image(image)?,
+            },
+            PageContent::EmbeddedFile(file) => Container::EmbeddedFile {
+                offsets: Offsets {
+                    offset_horizontal: file.offset_horizontal(),
+                    offset_vertical: file.offset_vertical(),
+                },
+                file: reader.embedded_file(file)?,
+            },
+            PageContent::Ink(ink) => Container::Ink(Offsets {
+                offset_horizontal: ink.offset_horizontal(),
+                offset_vertical: ink.offset_vertical(),
+            }),
+            PageContent::Unknown => continue,
+        });
+    }
+    Ok(containers)
 }
 
 fn outline_offsets(outline: &Outline) -> Offsets {
@@ -55,61 +80,153 @@ fn outline_offsets(outline: &Outline) -> Offsets {
     }
 }
 
-fn items(items: &[OutlineItem]) -> Vec<Item> {
-    items
-        .iter()
-        .map(|item| match item {
-            OutlineItem::Element(element) => self::element(element),
-            OutlineItem::Group(group) => Item::Group {
-                items: self::items(group.outlines()),
-            },
-        })
-        .collect()
+/// One page's read: the media its images and embedded files go to, and the counts that name
+/// each in a warning, in the order they are read.
+struct Reader<'a> {
+    media: &'a mut Media,
+    place: &'a str,
+    images: usize,
+    files: usize,
 }
 
-/// An outline element. Its list marker goes on its first block when that is a paragraph:
-/// onenote_parser keeps the marker on the element, and an element holds one paragraph in
-/// every file seen.
-fn element(element: &OutlineElement) -> Item {
-    let mut list = element.list_contents().first().and_then(marker);
-    let blocks = element
-        .contents()
-        .iter()
-        .enumerate()
-        .filter_map(|(index, content)| match content {
-            Content::RichText(text) => {
-                let marker = if index == 0 { list.take() } else { None };
-                Some(Block::Paragraph(paragraph(text, marker)))
-            }
-            Content::Table(table) => Some(Block::Table(self::table(table))),
-            Content::Image(_) => Some(Block::Image),
-            Content::EmbeddedFile(_) => Some(Block::EmbeddedFile),
-            Content::Ink(_) => Some(Block::Ink),
-            Content::Unknown => None,
-        })
-        .collect();
-    Item::Element {
-        blocks,
-        children: items(element.children()),
-    }
-}
-
-fn table(table: &Table) -> model::Table {
-    model::Table {
-        tags: tags(table.note_tags()),
-        rows: table
-            .contents()
+impl Reader<'_> {
+    fn items(&mut self, items: &[OutlineItem]) -> Result<Vec<Item>, Fault> {
+        items
             .iter()
-            .map(|row| {
-                row.contents()
-                    .iter()
-                    .map(|cell| model::Cell {
-                        items: cell.contents().iter().map(element).collect(),
-                    })
-                    .collect()
+            .map(|item| match item {
+                OutlineItem::Element(element) => self.element(element),
+                OutlineItem::Group(group) => Ok(Item::Group {
+                    items: self.items(group.outlines())?,
+                }),
             })
-            .collect(),
+            .collect()
     }
+
+    /// An outline element. Its list marker goes on its first block when that is a paragraph:
+    /// onenote_parser keeps the marker on the element, and an element holds one paragraph in
+    /// every file seen.
+    fn element(&mut self, element: &OutlineElement) -> Result<Item, Fault> {
+        let mut list = element.list_contents().first().and_then(marker);
+        let mut blocks = Vec::new();
+        for (index, content) in element.contents().iter().enumerate() {
+            blocks.push(match content {
+                Content::RichText(text) => {
+                    let marker = if index == 0 { list.take() } else { None };
+                    Block::Paragraph(paragraph(text, marker))
+                }
+                Content::Table(table) => Block::Table(self.table(table)?),
+                Content::Image(image) => Block::Image(self.image(image)?),
+                Content::EmbeddedFile(file) => Block::EmbeddedFile(self.embedded_file(file)?),
+                Content::Ink(_) => Block::Ink,
+                Content::Unknown => continue,
+            });
+        }
+        Ok(Item::Element {
+            blocks,
+            children: self.items(element.children())?,
+        })
+    }
+
+    fn table(&mut self, table: &Table) -> Result<model::Table, Fault> {
+        let mut rows = Vec::new();
+        for row in table.contents() {
+            let mut cells = Vec::new();
+            for cell in row.contents() {
+                cells.push(model::Cell {
+                    items: cell
+                        .contents()
+                        .iter()
+                        .map(|element| self.element(element))
+                        .collect::<Result<_, _>>()?,
+                });
+            }
+            rows.push(cells);
+        }
+        Ok(model::Table {
+            tags: tags(table.note_tags()),
+            rows,
+        })
+    }
+
+    /// An image. Its file is named by its own stored extension, else its filename's.
+    fn image(&mut self, image: &Image) -> Result<model::Image, Fault> {
+        self.images += 1;
+        let place = format!("{}, image {}", self.place, self.images);
+        let extension = image
+            .extension()
+            .map(|ext| ext.strip_prefix('.').unwrap_or(ext))
+            .filter(|ext| !ext.is_empty());
+        let filename = text(image.image_filename());
+        let available = image.data_status() == FileDataStatus::Available;
+        let file = self.file(
+            image.data_status(),
+            image.read(),
+            extension.or_else(|| filename.as_deref().and_then(media::extension_of)),
+            &place,
+        )?;
+        Ok(model::Image {
+            file,
+            size: image.size().filter(|_| available),
+            extension: extension.map(str::to_owned),
+            filename,
+            alt_text: text(image.alt_text()),
+            ocr_text: text(image.text()),
+            hyperlink: text(image.hyperlink_url()),
+            printout_page: image.displayed_page_number(),
+        })
+    }
+
+    /// An embedded file. Its file is named by its filename's extension.
+    fn embedded_file(&mut self, file: &EmbeddedFile) -> Result<model::EmbeddedFile, Fault> {
+        self.files += 1;
+        let place = format!("{}, embedded file {}", self.place, self.files);
+        let filename = text(Some(file.filename()));
+        let available = file.data_status() == FileDataStatus::Available;
+        Ok(model::EmbeddedFile {
+            file: self.file(
+                file.data_status(),
+                Some(file.read()),
+                filename.as_deref().and_then(media::extension_of),
+                &place,
+            )?,
+            filename,
+            file_type: match file.file_type() {
+                FileType::Audio => Some("audio"),
+                FileType::Video => Some("video"),
+                FileType::Unknown => None,
+            },
+            size: available.then(|| file.size()),
+        })
+    }
+
+    /// A record's file: its content stored in the media and named. Data that is missing,
+    /// invalid, or can't be read gives no file and a warning at `place`.
+    fn file(
+        &mut self,
+        status: FileDataStatus,
+        read: Option<Box<dyn Read>>,
+        extension: Option<&str>,
+        place: &str,
+    ) -> Result<Option<String>, Fault> {
+        let problem = match (status, read) {
+            (FileDataStatus::Available, Some(mut read)) => {
+                let mut bytes = Vec::new();
+                match read.read_to_end(&mut bytes) {
+                    Ok(_) => return self.media.store(&bytes, extension).map(Some),
+                    Err(err) => format!("its data can't be read: {err}"),
+                }
+            }
+            (FileDataStatus::Invalid, _) => "its data is invalid".to_owned(),
+            _ => "its data is missing".to_owned(),
+        };
+        warn(place, &format!("no file: {problem}"));
+        Ok(None)
+    }
+}
+
+/// A stored string, or none when it is empty.
+fn text(value: Option<&str>) -> Option<String> {
+    value.filter(|text| !text.is_empty()).map(str::to_owned)
 }
 
 fn paragraph(text: &RichText, list: Option<model::List>) -> model::Paragraph {
@@ -430,6 +547,26 @@ mod tests {
             Some("#ffc000".to_owned())
         );
         assert_eq!(color(ColorRef::Auto), None);
+    }
+
+    /// Data that is missing or invalid gives no file, and nothing goes to the media, which a
+    /// directory that can't be created would refuse; no committed fixture holds such a record.
+    #[test]
+    fn missing_or_invalid_data_has_no_file() {
+        let mut media = Media::new(Some("/dev/null/media".into()));
+        let mut reader = Reader {
+            media: &mut media,
+            place: "/Section, page 1",
+            images: 0,
+            files: 0,
+        };
+        for status in [FileDataStatus::Missing, FileDataStatus::Invalid] {
+            let read: Box<dyn Read> = Box::new(&b"bytes"[..]);
+            let file = reader.file(status, Some(read), Some("png"), "/Section, page 1, image 1");
+            assert!(matches!(file, Ok(None)), "{status:?}");
+        }
+        let file = reader.file(FileDataStatus::Available, None, None, "/Section, image 2");
+        assert!(matches!(file, Ok(None)));
     }
 
     #[test]

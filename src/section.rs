@@ -14,12 +14,13 @@ use typed_path::{PathType, TypedPath};
 use crate::content;
 use crate::guard::{Failure, guarded};
 use crate::jsonl::Lines;
+use crate::media::Media;
 use crate::model::{self, SCHEMA};
 use crate::{Fault, notebook_unread};
 
 /// Reads a OneStore input: a section's lines, or, when the parser finds a table of contents,
 /// the input handed on as a notebook.
-pub fn read(path: &Path, out: &mut Lines<impl Write>) -> Result<(), Fault> {
+pub fn read(path: &Path, media: &mut Media, out: &mut Lines<impl Write>) -> Result<(), Fault> {
     let parser = Parser::new();
     let section = match guarded(|| parser.parse_section(typed(path))) {
         Ok(section) => section,
@@ -42,20 +43,22 @@ pub fn read(path: &Path, out: &mut Lines<impl Write>) -> Result<(), Fault> {
         color: None,
     })
     .map_err(Fault::Output)?;
-    write(&section, None, &[], out)
+    write(&section, None, &[], media, out)
 }
 
 /// Writes a section's line, under the group `parent` at the names `above`, then its pages in
-/// the order of its page series.
+/// the order of its page series, each page's media stored before its line.
 pub fn write(
     section: &onenote_parser::section::Section,
     parent: Option<&str>,
     above: &[String],
+    media: &mut Media,
     out: &mut Lines<impl Write>,
 ) -> Result<(), Fault> {
     let id = section.file_identity().to_string();
     let mut path = above.to_vec();
     path.push(section.display_name().to_owned());
+    let place = place(&path);
     out.write(&model::Section {
         line: "section",
         id: id.clone(),
@@ -70,24 +73,50 @@ pub fn write(
         .iter()
         .flat_map(|series| series.pages())
     {
-        out.write(&page_line(page, &id)).map_err(Fault::Output)?;
+        let line = page_line(page, &id, &place, media)?;
+        out.write(&line).map_err(Fault::Output)?;
     }
     Ok(())
 }
 
-fn page_line(page: &Page, section: &str) -> model::Page {
+/// A page's line, its media stored first. `place` names its section in warnings.
+fn page_line(
+    page: &Page,
+    section: &str,
+    place: &str,
+    media: &mut Media,
+) -> Result<model::Page, Fault> {
     let text = |value: Option<&str>| value.filter(|text| !text.is_empty()).map(str::to_owned);
-    model::Page {
+    let id = guid(page.link_target_id());
+    let content = content::page(page, media, &format!("{place}, page {id}"))?;
+    Ok(model::Page {
         line: "page",
-        id: guid(page.link_target_id()),
+        id,
         section: section.to_owned(),
         level: page.level(),
         title: text(page.title_text()),
         creation_time: iso8601(page.created_time()),
         modification_time: iso8601(page.updated_time()),
         author: text(page.author()),
-        content: content::page(page),
+        content,
+    })
+}
+
+/// A section's place in a warning: its path from the notebook's root, "/Group/Section", with
+/// control characters escaped so the warning stays one line.
+fn place(path: &[String]) -> String {
+    let mut place = String::new();
+    for name in path {
+        place.push('/');
+        for c in name.chars() {
+            if c.is_control() {
+                place.extend(c.escape_debug());
+            } else {
+                place.push(c);
+            }
+        }
     }
+    place
 }
 
 /// Whether the parser refused a section because its store is a table of contents. Its error
@@ -140,6 +169,12 @@ mod tests {
             iso8601(utc_datetime!(2020-11-02 13:45:49.897)),
             "2020-11-02T13:45:49Z"
         );
+    }
+
+    #[test]
+    fn a_place_is_the_sections_path_on_one_line() {
+        let path = ["Group".to_owned(), "Sec\ntion".to_owned()];
+        assert_eq!(place(&path), "/Group/Sec\\ntion");
     }
 
     #[test]

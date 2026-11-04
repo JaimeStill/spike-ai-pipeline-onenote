@@ -9,6 +9,7 @@
 mod content;
 mod guard;
 mod jsonl;
+mod media;
 mod model;
 mod section;
 mod sniff;
@@ -22,6 +23,7 @@ use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
 use jsonl::Lines;
+use media::Media;
 use sniff::Input;
 
 const NAME: &str = "spike-ai-pipeline-onenote";
@@ -37,6 +39,8 @@ pub enum Fault {
     Refused(String),
     /// stdout couldn't be written: exit 1.
     Output(io::Error),
+    /// The media directory, or a file in it, couldn't be written: exit 1, with this reason.
+    Media(String),
     /// A fault of the CLI's own: exit 4.
     Internal(String),
 }
@@ -49,10 +53,6 @@ enum Command {
 
 struct Args {
     input: PathBuf,
-    #[expect(
-        dead_code,
-        reason = "parsed and checked now; written to once images, embedded files and ink are read"
-    )]
     media: Option<PathBuf>,
 }
 
@@ -66,6 +66,7 @@ fn main() -> ExitCode {
     match outcome {
         Ok(()) => ExitCode::SUCCESS,
         Err(Fault::Output(err)) => fail(1, &format!("stdout can't be written: {err}")),
+        Err(Fault::Media(reason)) => fail(1, &reason),
         Err(Fault::Usage(reason)) => {
             eprintln!("{NAME}: {reason}\n{USAGE}");
             ExitCode::from(2)
@@ -93,12 +94,19 @@ fn run(args: &[OsString]) -> Result<(), Fault> {
     let input = sniff::sniff(path)?;
     // From here, descriptor 1 is /dev/null and the lines go to the descriptor stdout was.
     let mut out = Lines::new(BufWriter::new(stdout::take()?));
+    let mut media = Media::new(args.media);
     match input {
-        Input::OneStore => section::read(path, &mut out)?,
+        Input::OneStore => section::read(path, &mut media, &mut out)?,
         Input::Directory(toc) => return Err(notebook_unread(&toc)),
         Input::Package => return Err(notebook_unread(path)),
     }
     out.flush().map_err(Fault::Output)
+}
+
+/// Writes one warning line: `place` names the record, from its section down, and `what` says
+/// what happened to it.
+pub fn warn(place: &str, what: &str) {
+    eprintln!("{NAME}: warning: {place}: {what}");
 }
 
 /// The refusal of a notebook, a notebook directory, or a package, which aren't read yet.

@@ -284,8 +284,8 @@ fn tables_hold_rows_of_cells() {
 }
 
 /// The rest of the main outline, in order: paragraphs and blank lines, an equation, still a
-/// plain italic run until math is read, and an image, named by its kind alone until images
-/// are read.
+/// plain italic run until math is read, and an image block, whose fields tests/media.rs
+/// checks.
 #[test]
 fn the_rest_of_the_outline_in_order() {
     for file in SAMPLES {
@@ -305,15 +305,13 @@ fn the_rest_of_the_outline_in_order() {
             (16, blank()),
             (17, element("p", json!([{"text": "𝑎=𝑏", "italic": true}]))),
             (18, blank()),
-            (
-                19,
-                json!({"kind": "element", "blocks": [{"kind": "image"}]}),
-            ),
             (20, blank()),
             (21, blank()),
         ];
         for (index, item) in expected {
             assert_eq!(items[index], item, "{file}: item {index}");
         }
+        assert_eq!(items[19]["blocks"][0]["kind"], "image", "{file}");
+        assert_eq!(items[19]["blocks"].as_array().unwrap().len(), 1, "{file}");
     }
 }

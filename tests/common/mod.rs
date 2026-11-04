@@ -36,6 +36,11 @@ pub fn run<S: AsRef<OsStr>>(args: &[S]) -> Run {
     finish(Command::new(BIN).args(args))
 }
 
+/// One run of the binary in the working directory `dir`.
+pub fn run_in<S: AsRef<OsStr>>(dir: &Path, args: &[S]) -> Run {
+    finish(Command::new(BIN).args(args).current_dir(dir))
+}
+
 /// One run of the binary with its stdout on `stdout`.
 pub fn run_to<S: AsRef<OsStr>>(stdout: impl Into<Stdio>, args: &[S]) -> Run {
     finish(Command::new(BIN).args(args).stdout(stdout))

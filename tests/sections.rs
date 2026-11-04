@@ -104,8 +104,8 @@ fn every_public_section_reads_as_expected() {
 }
 
 /// Every line of every read is a JSON object whose `line` field names its kind, with no null,
-/// empty string, empty list or empty object anywhere in it, and every time ISO 8601 UTC to the
-/// second. Each read's output is byte-identical from one run to the next.
+/// empty string, empty list or empty object anywhere in it but an empty table cell, `{}`, which
+/// holds its place in its row; and every time ISO 8601 UTC to the second. Each read's output is byte-identical from one run to the next.
 #[test]
 fn every_read_keeps_the_line_rules_and_repeats_byte_for_byte() {
     for expected in expectations() {
@@ -146,11 +146,30 @@ fn assert_no_empty(value: &Value, file: &str) {
         }
         Value::Object(fields) => {
             assert!(!fields.is_empty(), "{file}: an empty object");
-            fields
-                .values()
-                .for_each(|field| assert_no_empty(field, file));
+            for (name, field) in fields {
+                if value["kind"] == "table" && name == "rows" {
+                    assert_no_empty_rows(field, file);
+                } else {
+                    assert_no_empty(field, file);
+                }
+            }
         }
         Value::Bool(_) | Value::Number(_) => {}
+    }
+}
+
+/// A table's rows: no row is empty, and a cell may be the empty object, as an empty cell is.
+fn assert_no_empty_rows(rows: &Value, file: &str) {
+    let rows = rows.as_array().unwrap();
+    assert!(!rows.is_empty(), "{file}: a table without rows");
+    for row in rows {
+        let cells = row.as_array().unwrap();
+        assert!(!cells.is_empty(), "{file}: an empty row");
+        for cell in cells {
+            if cell.as_object().is_none_or(|fields| !fields.is_empty()) {
+                assert_no_empty(cell, file);
+            }
+        }
     }
 }
 

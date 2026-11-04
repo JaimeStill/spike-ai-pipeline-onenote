@@ -85,9 +85,19 @@ pub enum Container {
         #[serde(skip_serializing_if = "Vec::is_empty")]
         items: Vec<Item>,
     },
-    // Images, embedded files and ink carry their offsets alone until they're read.
-    Image(Offsets),
-    EmbeddedFile(Offsets),
+    Image {
+        #[serde(flatten)]
+        offsets: Offsets,
+        #[serde(flatten)]
+        image: Image,
+    },
+    EmbeddedFile {
+        #[serde(flatten)]
+        offsets: Offsets,
+        #[serde(flatten)]
+        file: EmbeddedFile,
+    },
+    // Ink carries its offsets alone until it's read.
     Ink(Offsets),
 }
 
@@ -123,10 +133,54 @@ pub enum Item {
 pub enum Block {
     Paragraph(Paragraph),
     Table(Table),
-    // Images, embedded files and ink inside an outline are named, not yet read.
-    Image,
-    EmbeddedFile,
+    Image(Image),
+    EmbeddedFile(EmbeddedFile),
+    // Ink inside an outline is named, not yet read.
     Ink,
+}
+
+/// An image. Its file is the name of its content in the media directory; an image whose data
+/// is missing or invalid has none, and keeps its other fields.
+#[derive(Serialize)]
+pub struct Image {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file: Option<String>,
+    /// In bytes, when its data is there.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size: Option<u64>,
+    /// The picture's own stored extension, without its leading dot.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extension: Option<String>,
+    /// The name of the file it was inserted from, as stored; never used as a path.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filename: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alt_text: Option<String>,
+    /// The text OneNote recognised in the picture. It is in the model only, never in the
+    /// Markdown.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ocr_text: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hyperlink: Option<String>,
+    /// For a picture of a printout, the printed page it shows.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub printout_page: Option<u32>,
+}
+
+/// An embedded file, its file named as an image's is.
+#[derive(Serialize)]
+pub struct EmbeddedFile {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file: Option<String>,
+    /// The name it was attached under, as stored; never used as a path.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filename: Option<String>,
+    /// "audio" or "video" for a recording; other files have none.
+    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
+    pub file_type: Option<&'static str>,
+    /// In bytes, when its data is there.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size: Option<u64>,
 }
 
 #[derive(Serialize)]
@@ -185,7 +239,8 @@ pub struct Table {
     pub rows: Vec<Vec<Cell>>,
 }
 
-/// A table cell: its outline elements, as an outline's items.
+/// A table cell: its outline elements, as an outline's items. An empty cell is written `{}`,
+/// the one empty object a line holds, since a cell holds its place in its row.
 #[derive(Serialize)]
 pub struct Cell {
     #[serde(skip_serializing_if = "Vec::is_empty")]
@@ -222,4 +277,18 @@ pub struct Run {
 
 fn is_false(flag: &bool) -> bool {
     !flag
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn an_empty_cell_is_an_empty_object() {
+        let table = Table {
+            tags: Vec::new(),
+            rows: vec![vec![Cell { items: Vec::new() }]],
+        };
+        assert_eq!(serde_json::to_string(&table).unwrap(), r#"{"rows":[[{}]]}"#);
+    }
 }
