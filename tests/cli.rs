@@ -26,7 +26,7 @@ fn version_prints_the_bare_crate_version() {
     assert_eq!(out.stderr, "");
 }
 
-/// Each usage error exits 2 with its reason and the usage on stderr, and nothing on stdout.
+/// Each usage error exits 2 with one error line, then the usage, on stderr, and nothing on stdout.
 #[test]
 fn usage_errors_exit_2_with_usage() {
     let section = fixture(DESKTOP);
@@ -60,7 +60,13 @@ fn usage_errors_exit_2_with_usage() {
         let out = run(args);
         assert_eq!(out.code, Some(2), "{args:?}");
         assert_eq!(out.stdout, "", "{args:?}");
-        assert_eq!(out.stderr, format!("{NAME}: {reason}\n{USAGE}"), "{args:?}");
+        let first = out.stderr.lines().next().unwrap_or_default();
+        assert_eq!(first, format!("{NAME}: error: {reason}"), "{args:?}");
+        assert_eq!(
+            out.stderr,
+            format!("{NAME}: error: {reason}\n{USAGE}"),
+            "{args:?}"
+        );
     }
 }
 

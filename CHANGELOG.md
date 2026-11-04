@@ -88,6 +88,8 @@ here.
 - A section that fails inside a section group is lost silently.
 - A table-of-contents entry whose file is missing gets no warning.
 - onenote_parser's stdout is redirected to `/dev/null`, and what it prints there is lost.
+- A desktop printout image with no stored extension is named for its filename's extension
+  (`.pdf` for PNG bytes): route a printout image by its byte signature, not its extension.
 
 [Unreleased]: https://github.com/JaimeStill/spike-ai-pipeline-onenote/compare/v0.1.0...HEAD
 [v0.1.0]: https://github.com/JaimeStill/spike-ai-pipeline-onenote/releases/tag/v0.1.0

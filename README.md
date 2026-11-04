@@ -353,6 +353,9 @@ and the time and peak resident memory of every input, median of 3:
   directory's.
 - onenote_parser's stdout is redirected to `/dev/null`, so anything it prints there is lost; the
   warnings of its reports, which the CLI writes to stderr, are not.
+- A desktop printout image with no stored extension is named for its filename's extension, so
+  PNG bytes can be written as `.pdf`: a consumer routes a printout image by its byte signature,
+  not its extension.
 
 ## Development
 

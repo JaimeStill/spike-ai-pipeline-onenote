@@ -72,7 +72,7 @@ fn main() -> ExitCode {
         Err(Fault::Output(err)) => fail(1, &format!("stdout can't be written: {err}")),
         Err(Fault::Media(reason)) => fail(1, &reason),
         Err(Fault::Usage(reason)) => {
-            eprintln!("{NAME}: {reason}\n{USAGE}");
+            eprintln!("{NAME}: error: {reason}\n{USAGE}");
             ExitCode::from(2)
         }
         Err(Fault::Refused(reason)) => fail(3, &reason),
