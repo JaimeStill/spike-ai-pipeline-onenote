@@ -1,0 +1,2852 @@
+{
+  "cli": {
+    "binary": "spike-ai-pipeline-onenote",
+    "build": "release, static musl, the check's target",
+    "commit": "c9d83cc",
+    "sha256": "0ea84ce54406f84eb24ee24b32323f6144c56e3b5c0618783a067bb26473dae7",
+    "size": 3516048,
+    "version": "0.1.0"
+  },
+  "finished": "2026-11-04T18:54:30Z",
+  "large": [
+    {
+      "commit": "fe87ed3253de01804a2ae6e1d0015943da6023f8",
+      "license": "MIT",
+      "name": "LargeData.one",
+      "path": "FileSyncandWOPI/Setup/SUT/LargeData.one",
+      "repository": "https://github.com/OfficeDev/Interop-TestSuites",
+      "sha256": "034d91a640d655a522efda1d98de4ec4c952aaa02e5ad59f7c35537ccf9c2ba1",
+      "size": 11288928
+    },
+    {
+      "commit": "727389a674665dc07e0c31818cd4b54b64b9c684",
+      "license": "MPL-2.0",
+      "name": "Large Desktop.one",
+      "path": "crates/parser/tests/samples/Large Desktop.one",
+      "repository": "https://github.com/msiemens/onenote.rs",
+      "sha256": "0a568f02de8bdc4196dfad97ce2ecac04456efd9376c275ff67af412a4604668",
+      "size": 112965624
+    },
+    {
+      "commit": "727389a674665dc07e0c31818cd4b54b64b9c684",
+      "license": "MPL-2.0",
+      "name": "Large OneDrive.one",
+      "path": "crates/parser/tests/samples/Large OneDrive.one",
+      "repository": "https://github.com/msiemens/onenote.rs",
+      "sha256": "713980fd942180f64910b71fc6236cd22f407facc9b8bd25e99b2eeb1ac9651a",
+      "size": 161469274
+    }
+  ],
+  "machine": {
+    "cpu": "Intel(R) Core(TM) Ultra 9 185H",
+    "kernel": "7.2.15-1-omarchy",
+    "logical_cpus": 22,
+    "memory": "32284144 kB"
+  },
+  "recovery": {
+    "content": {
+      "files": [
+        "onenote-rs/New Section 1.one",
+        "onenote-rs/handwriting_recognition.one",
+        "onenote-rs/non-legacy/New Section 1 2.one",
+        "interop/SUT/OneWithFileData.one",
+        "interop/SUT/FileSyncWOPI_OneNoteWithODB.one",
+        "onenote-rs/New Section Group/New Section 2.one"
+      ],
+      "kinds": [
+        {
+          "expected": 19,
+          "kind": "Container",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 19
+        },
+        {
+          "expected": 10,
+          "kind": "Paragraph style",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 10
+        },
+        {
+          "expected": 14,
+          "kind": "Run, plain",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 14
+        },
+        {
+          "expected": 12,
+          "kind": "Run, formatted",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 12
+        },
+        {
+          "expected": 4,
+          "kind": "Run, coloured",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 4
+        },
+        {
+          "expected": 4,
+          "kind": "Link",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 4
+        },
+        {
+          "expected": 6,
+          "kind": "Note tag",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 6
+        },
+        {
+          "expected": 18,
+          "kind": "List marker",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 18
+        },
+        {
+          "expected": 4,
+          "kind": "Table",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 4
+        },
+        {
+          "expected": 2,
+          "kind": "Math",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 2
+        },
+        {
+          "absent_expected": 2,
+          "absent_ok": 2,
+          "expected": 20,
+          "kind": "Image",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 20
+        },
+        {
+          "absent_expected": 1,
+          "absent_ok": 1,
+          "expected": 10,
+          "kind": "Ink",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 10
+        },
+        {
+          "absent_expected": 3,
+          "absent_ok": 3,
+          "expected": 4,
+          "kind": "Recognised words",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 4
+        },
+        {
+          "expected": 2,
+          "kind": "Embedded file",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 2
+        }
+      ],
+      "misses": []
+    },
+    "notebooks": {
+      "files": [
+        "interop/Resources/AlternativePackaging.onetoc2",
+        "interop/Resources/NoSection.onetoc2",
+        "interop/Resources/Open Notebook.onetoc2",
+        "interop/SUT/Open Notebook.onetoc2",
+        "onenote-rs/New Section Group/Open Notebook.onetoc2",
+        "onenote-rs/non-legacy/Open Notebook.onetoc2",
+        "onenote-rs/object-revision/Open Notebook.onetoc2",
+        "onenote-rs/OneNote_RecycleBin/Open Notebook.onetoc2",
+        "onenote-rs/Open Notebook.onetoc2"
+      ],
+      "kinds": [
+        {
+          "expected": 9,
+          "kind": "Exit code",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 9
+        },
+        {
+          "absent_expected": 9,
+          "absent_ok": 9,
+          "expected": 2,
+          "kind": "Warning",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 2
+        },
+        {
+          "expected": 9,
+          "kind": "Notebook schema",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 9
+        },
+        {
+          "expected": 9,
+          "kind": "Notebook input kind",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 9
+        },
+        {
+          "expected": 9,
+          "kind": "Notebook name",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 9
+        },
+        {
+          "expected": 9,
+          "kind": "Notebook id",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 9
+        },
+        {
+          "absent_expected": 2,
+          "absent_ok": 2,
+          "expected": 7,
+          "kind": "Notebook colour",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 7
+        },
+        {
+          "expected": 9,
+          "kind": "Line kinds",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 9
+        },
+        {
+          "expected": 10,
+          "kind": "Section id",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 10
+        },
+        {
+          "expected": 10,
+          "kind": "Section path",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 10
+        },
+        {
+          "expected": 10,
+          "kind": "Section display name",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 10
+        },
+        {
+          "expected": 10,
+          "kind": "Section colour",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 10
+        },
+        {
+          "absent_expected": 10,
+          "absent_ok": 10,
+          "expected": 0,
+          "kind": "Section parent",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 0
+        },
+        {
+          "expected": 13,
+          "kind": "Page id",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 13
+        },
+        {
+          "expected": 13,
+          "kind": "Page section",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 13
+        },
+        {
+          "absent_expected": 5,
+          "absent_ok": 5,
+          "expected": 8,
+          "kind": "Page title",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 8
+        },
+        {
+          "expected": 1,
+          "kind": "Skipped section",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 1
+        }
+      ],
+      "misses": []
+    },
+    "sections": {
+      "files": [
+        "interop/Resources/AlternativePackaging.one",
+        "interop/SUT/Encryption.one",
+        "interop/SUT/FileSyncWOPI_OneNoteWithODB.one",
+        "interop/SUT/InvalidData.one",
+        "interop/SUT/OneWithFileData.one",
+        "interop/SUT/OneWithoutFileData.one",
+        "onenote-rs/New Section 1.one",
+        "onenote-rs/New Section Group/New Section 1.one",
+        "onenote-rs/New Section Group/New Section 2.one",
+        "onenote-rs/OneNote_RecycleBin/OneNote_DeletedPages.one",
+        "onenote-rs/handwriting_recognition.one",
+        "onenote-rs/non-legacy/New Section 1 2.one",
+        "onenote-rs/non-legacy/New Section 2.one",
+        "onenote-rs/non-legacy/New Section 3.one"
+      ],
+      "kinds": [
+        {
+          "expected": 14,
+          "kind": "Exit code",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 14
+        },
+        {
+          "expected": 14,
+          "kind": "Line kinds",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 14
+        },
+        {
+          "absent_expected": 13,
+          "absent_ok": 13,
+          "expected": 0,
+          "kind": "Warning",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 0
+        },
+        {
+          "expected": 13,
+          "kind": "Notebook line",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 13
+        },
+        {
+          "expected": 13,
+          "kind": "Section id",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 13
+        },
+        {
+          "expected": 13,
+          "kind": "Section display name",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 13
+        },
+        {
+          "expected": 13,
+          "kind": "Section path",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 13
+        },
+        {
+          "expected": 13,
+          "kind": "Section colour",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 13
+        },
+        {
+          "absent_expected": 13,
+          "absent_ok": 13,
+          "expected": 0,
+          "kind": "Section parent",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 0
+        },
+        {
+          "expected": 17,
+          "kind": "Page id",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 17
+        },
+        {
+          "expected": 17,
+          "kind": "Page section",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 17
+        },
+        {
+          "expected": 17,
+          "kind": "Page level",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 17
+        },
+        {
+          "absent_expected": 6,
+          "absent_ok": 6,
+          "expected": 11,
+          "kind": "Page title",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 11
+        },
+        {
+          "expected": 17,
+          "kind": "Page created",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 17
+        },
+        {
+          "expected": 17,
+          "kind": "Page modified",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 17
+        },
+        {
+          "absent_expected": 2,
+          "absent_ok": 2,
+          "expected": 15,
+          "kind": "Page author",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 15
+        },
+        {
+          "expected": 10,
+          "kind": "Containers: outline",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 10
+        },
+        {
+          "expected": 17,
+          "kind": "Containers: title",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 17
+        },
+        {
+          "expected": 1,
+          "kind": "Refusal reason",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 1
+        },
+        {
+          "expected": 3,
+          "kind": "Containers: ink",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 3
+        },
+        {
+          "expected": 1,
+          "kind": "Containers: image",
+          "mismatched": 0,
+          "missing": 0,
+          "recovered": 1
+        }
+      ],
+      "misses": []
+    }
+  },
+  "rusage_floor": {
+    "code": 0,
+    "maxrss_kib": 1528,
+    "status": "exited",
+    "sys_us": 607,
+    "user_us": 0,
+    "wall_ns": 677938
+  },
+  "schema": 1,
+  "started": "2026-11-04T18:54:19Z",
+  "timing": [
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/Resources/AlternativePackaging.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2144,
+      "media": false,
+      "median_maxrss_kib": 2144,
+      "median_wall_ns": 1666329,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 1585,
+          "user_us": 0,
+          "wall_ns": 1666329
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1509,
+          "wall_ns": 1675846
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 1466,
+          "user_us": 0,
+          "wall_ns": 1554590
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 20495,
+      "stderr_lines": [],
+      "stdout_bytes": 1316,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/Resources/AlternativePackaging.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2144,
+      "media": true,
+      "median_maxrss_kib": 2144,
+      "median_wall_ns": 1486108,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 1383,
+          "user_us": 0,
+          "wall_ns": 1432881
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1523,
+          "wall_ns": 1606612
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1421,
+          "wall_ns": 1486108
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 20495,
+      "stderr_lines": [],
+      "stdout_bytes": 1316,
+      "written": {
+        "bytes": 0,
+        "files": 0
+      }
+    },
+    {
+      "code": 3,
+      "input": "tests/fixtures/interop/SUT/Encryption.one",
+      "lines": {},
+      "max_maxrss_kib": 1968,
+      "media": false,
+      "median_maxrss_kib": 1968,
+      "median_wall_ns": 783347,
+      "runs": [
+        {
+          "code": 3,
+          "maxrss_kib": 1968,
+          "status": "exited",
+          "sys_us": 710,
+          "user_us": 0,
+          "wall_ns": 788153
+        },
+        {
+          "code": 3,
+          "maxrss_kib": 1968,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 693,
+          "wall_ns": 754296
+        },
+        {
+          "code": 3,
+          "maxrss_kib": 1968,
+          "status": "exited",
+          "sys_us": 700,
+          "user_us": 0,
+          "wall_ns": 783347
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 16328,
+      "stderr_lines": [
+        "spike-ai-pipeline-onenote: error: tests/fixtures/interop/SUT/Encryption.one: Unexpected end of file"
+      ],
+      "stdout_bytes": 0,
+      "written": null
+    },
+    {
+      "code": 3,
+      "input": "tests/fixtures/interop/SUT/Encryption.one",
+      "lines": {},
+      "max_maxrss_kib": 1968,
+      "media": true,
+      "median_maxrss_kib": 1968,
+      "median_wall_ns": 671255,
+      "runs": [
+        {
+          "code": 3,
+          "maxrss_kib": 1968,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 581,
+          "wall_ns": 622722
+        },
+        {
+          "code": 3,
+          "maxrss_kib": 1968,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 602,
+          "wall_ns": 671255
+        },
+        {
+          "code": 3,
+          "maxrss_kib": 1968,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 663,
+          "wall_ns": 737773
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 16328,
+      "stderr_lines": [
+        "spike-ai-pipeline-onenote: error: tests/fixtures/interop/SUT/Encryption.one: Unexpected end of file"
+      ],
+      "stdout_bytes": 0,
+      "written": {
+        "bytes": 0,
+        "files": 0
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/SUT/FileSyncWOPI_OneNoteWithODB.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 4548,
+      "media": false,
+      "median_maxrss_kib": 4540,
+      "median_wall_ns": 3650879,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 4236,
+          "status": "exited",
+          "sys_us": 3014,
+          "user_us": 0,
+          "wall_ns": 3105657
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 4540,
+          "status": "exited",
+          "sys_us": 895,
+          "user_us": 2660,
+          "wall_ns": 3684858
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 4548,
+          "status": "exited",
+          "sys_us": 3573,
+          "user_us": 0,
+          "wall_ns": 3650879
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 898136,
+      "stderr_lines": [],
+      "stdout_bytes": 1836,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/SUT/FileSyncWOPI_OneNoteWithODB.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 4544,
+      "media": true,
+      "median_maxrss_kib": 4544,
+      "median_wall_ns": 2701775,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 4544,
+          "status": "exited",
+          "sys_us": 1916,
+          "user_us": 1913,
+          "wall_ns": 3920681
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 4544,
+          "status": "exited",
+          "sys_us": 1757,
+          "user_us": 858,
+          "wall_ns": 2701775
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 4192,
+          "status": "exited",
+          "sys_us": 2487,
+          "user_us": 0,
+          "wall_ns": 2578237
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 898136,
+      "stderr_lines": [],
+      "stdout_bytes": 1836,
+      "written": {
+        "bytes": 879394,
+        "files": 1
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/SUT/InvalidData.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2480,
+      "media": false,
+      "median_maxrss_kib": 2480,
+      "median_wall_ns": 4197794,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2480,
+          "status": "exited",
+          "sys_us": 1981,
+          "user_us": 990,
+          "wall_ns": 3078498
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2480,
+          "status": "exited",
+          "sys_us": 1039,
+          "user_us": 3117,
+          "wall_ns": 4261699
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2480,
+          "status": "exited",
+          "sys_us": 2038,
+          "user_us": 2053,
+          "wall_ns": 4197794
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 283504,
+      "stderr_lines": [],
+      "stdout_bytes": 1385,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/SUT/InvalidData.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2480,
+      "media": true,
+      "median_maxrss_kib": 2304,
+      "median_wall_ns": 3352826,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2304,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 3290,
+          "wall_ns": 3352826
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2480,
+          "status": "exited",
+          "sys_us": 839,
+          "user_us": 1672,
+          "wall_ns": 2613004
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2304,
+          "status": "exited",
+          "sys_us": 1133,
+          "user_us": 2236,
+          "wall_ns": 3428468
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 283504,
+      "stderr_lines": [],
+      "stdout_bytes": 1385,
+      "written": {
+        "bytes": 0,
+        "files": 0
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/SUT/OneWithFileData.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2144,
+      "media": false,
+      "median_maxrss_kib": 2144,
+      "median_wall_ns": 1624798,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1538,
+          "wall_ns": 1624798
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1544,
+          "wall_ns": 1620831
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 801,
+          "user_us": 799,
+          "wall_ns": 1690475
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 30336,
+      "stderr_lines": [],
+      "stdout_bytes": 1249,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/SUT/OneWithFileData.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2144,
+      "media": true,
+      "median_maxrss_kib": 2144,
+      "median_wall_ns": 1678016,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 832,
+          "user_us": 826,
+          "wall_ns": 1753637
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1533,
+          "wall_ns": 1583160
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 1617,
+          "user_us": 0,
+          "wall_ns": 1678016
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 30336,
+      "stderr_lines": [],
+      "stdout_bytes": 1249,
+      "written": {
+        "bytes": 14660,
+        "files": 1
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/SUT/OneWithoutFileData.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2128,
+      "media": false,
+      "median_maxrss_kib": 2128,
+      "median_wall_ns": 2085143,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2128,
+          "status": "exited",
+          "sys_us": 984,
+          "user_us": 984,
+          "wall_ns": 2057429
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2128,
+          "status": "exited",
+          "sys_us": 2025,
+          "user_us": 0,
+          "wall_ns": 2085143
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2128,
+          "status": "exited",
+          "sys_us": 1060,
+          "user_us": 1061,
+          "wall_ns": 2202920
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 26216,
+      "stderr_lines": [],
+      "stdout_bytes": 1281,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/SUT/OneWithoutFileData.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2144,
+      "media": true,
+      "median_maxrss_kib": 2136,
+      "median_wall_ns": 2758165,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2136,
+          "status": "exited",
+          "sys_us": 1769,
+          "user_us": 884,
+          "wall_ns": 2758165
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 888,
+          "user_us": 1794,
+          "wall_ns": 2764983
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2128,
+          "status": "exited",
+          "sys_us": 2069,
+          "user_us": 0,
+          "wall_ns": 2148589
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 26216,
+      "stderr_lines": [],
+      "stdout_bytes": 1281,
+      "written": {
+        "bytes": 0,
+        "files": 0
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/New Section 1.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 3360,
+      "media": false,
+      "median_maxrss_kib": 3184,
+      "median_wall_ns": 5930037,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 3132,
+          "status": "exited",
+          "sys_us": 867,
+          "user_us": 3462,
+          "wall_ns": 4515650
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3360,
+          "status": "exited",
+          "sys_us": 876,
+          "user_us": 3497,
+          "wall_ns": 9188691
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3184,
+          "status": "exited",
+          "sys_us": 1924,
+          "user_us": 3855,
+          "wall_ns": 5930037
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 264421,
+      "stderr_lines": [],
+      "stdout_bytes": 11435,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/New Section 1.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 3360,
+      "media": true,
+      "median_maxrss_kib": 3360,
+      "median_wall_ns": 5644949,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 3360,
+          "status": "exited",
+          "sys_us": 899,
+          "user_us": 3581,
+          "wall_ns": 4651093
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3360,
+          "status": "exited",
+          "sys_us": 2906,
+          "user_us": 3859,
+          "wall_ns": 6996554
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3184,
+          "status": "exited",
+          "sys_us": 2742,
+          "user_us": 2739,
+          "wall_ns": 5644949
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 264421,
+      "stderr_lines": [],
+      "stdout_bytes": 11435,
+      "written": {
+        "bytes": 94875,
+        "files": 2
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/New Section Group/New Section 1.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2144,
+      "media": false,
+      "median_maxrss_kib": 1952,
+      "median_wall_ns": 1172431,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 1952,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1116,
+          "wall_ns": 1172431
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 1221,
+          "user_us": 0,
+          "wall_ns": 1306910
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 1952,
+          "status": "exited",
+          "sys_us": 944,
+          "user_us": 0,
+          "wall_ns": 1030143
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 12796,
+      "stderr_lines": [],
+      "stdout_bytes": 1197,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/New Section Group/New Section 1.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2144,
+      "media": true,
+      "median_maxrss_kib": 2144,
+      "median_wall_ns": 1198541,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 1952,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 996,
+          "wall_ns": 1131402
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 1105,
+          "user_us": 0,
+          "wall_ns": 1198541
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 1163,
+          "user_us": 0,
+          "wall_ns": 1238696
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 12796,
+      "stderr_lines": [],
+      "stdout_bytes": 1197,
+      "written": {
+        "bytes": 0,
+        "files": 0
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/New Section Group/New Section 2.one",
+      "lines": {
+        "notebook": 1,
+        "page": 2,
+        "section": 1
+      },
+      "max_maxrss_kib": 2496,
+      "media": false,
+      "median_maxrss_kib": 2496,
+      "median_wall_ns": 2394253,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2496,
+          "status": "exited",
+          "sys_us": 1167,
+          "user_us": 1167,
+          "wall_ns": 2414098
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2496,
+          "status": "exited",
+          "sys_us": 1126,
+          "user_us": 1129,
+          "wall_ns": 2394253
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2304,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1673,
+          "wall_ns": 1755125
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 166743,
+      "stderr_lines": [],
+      "stdout_bytes": 2314,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/New Section Group/New Section 2.one",
+      "lines": {
+        "notebook": 1,
+        "page": 2,
+        "section": 1
+      },
+      "max_maxrss_kib": 2304,
+      "media": true,
+      "median_maxrss_kib": 2140,
+      "median_wall_ns": 1836514,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2096,
+          "status": "exited",
+          "sys_us": 866,
+          "user_us": 877,
+          "wall_ns": 1836514
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2304,
+          "status": "exited",
+          "sys_us": 915,
+          "user_us": 927,
+          "wall_ns": 1936221
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2140,
+          "status": "exited",
+          "sys_us": 1684,
+          "user_us": 0,
+          "wall_ns": 1779257
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 166743,
+      "stderr_lines": [],
+      "stdout_bytes": 2314,
+      "written": {
+        "bytes": 104425,
+        "files": 2
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/OneNote_RecycleBin/OneNote_DeletedPages.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2144,
+      "media": false,
+      "median_maxrss_kib": 2144,
+      "median_wall_ns": 1109361,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 1040,
+          "user_us": 0,
+          "wall_ns": 1102291
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 1028,
+          "user_us": 0,
+          "wall_ns": 1109361
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1058,
+          "wall_ns": 1133861
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 8457,
+      "stderr_lines": [],
+      "stdout_bytes": 889,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/OneNote_RecycleBin/OneNote_DeletedPages.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2144,
+      "media": true,
+      "median_maxrss_kib": 2144,
+      "median_wall_ns": 1044367,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 969,
+          "user_us": 0,
+          "wall_ns": 1044367
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 950,
+          "wall_ns": 1022737
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 993,
+          "user_us": 0,
+          "wall_ns": 1057600
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 8457,
+      "stderr_lines": [],
+      "stdout_bytes": 889,
+      "written": {
+        "bytes": 0,
+        "files": 0
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/handwriting_recognition.one",
+      "lines": {
+        "notebook": 1,
+        "page": 2,
+        "section": 1
+      },
+      "max_maxrss_kib": 3360,
+      "media": false,
+      "median_maxrss_kib": 3184,
+      "median_wall_ns": 7185875,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 3168,
+          "status": "exited",
+          "sys_us": 2947,
+          "user_us": 3949,
+          "wall_ns": 7116122
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3184,
+          "status": "exited",
+          "sys_us": 2005,
+          "user_us": 5009,
+          "wall_ns": 7185875
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3360,
+          "status": "exited",
+          "sys_us": 987,
+          "user_us": 7867,
+          "wall_ns": 9094656
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 180020,
+      "stderr_lines": [],
+      "stdout_bytes": 20795,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/handwriting_recognition.one",
+      "lines": {
+        "notebook": 1,
+        "page": 2,
+        "section": 1
+      },
+      "max_maxrss_kib": 3184,
+      "media": true,
+      "median_maxrss_kib": 3180,
+      "median_wall_ns": 7998103,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 3180,
+          "status": "exited",
+          "sys_us": 2213,
+          "user_us": 5571,
+          "wall_ns": 7998103
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3184,
+          "status": "exited",
+          "sys_us": 3806,
+          "user_us": 5694,
+          "wall_ns": 9743378
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2984,
+          "status": "exited",
+          "sys_us": 3229,
+          "user_us": 4353,
+          "wall_ns": 7744263
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 180020,
+      "stderr_lines": [],
+      "stdout_bytes": 20795,
+      "written": {
+        "bytes": 144956,
+        "files": 2
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/non-legacy/New Section 1 2.one",
+      "lines": {
+        "notebook": 1,
+        "page": 2,
+        "section": 1
+      },
+      "max_maxrss_kib": 3360,
+      "media": false,
+      "median_maxrss_kib": 3360,
+      "median_wall_ns": 4955303,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 3360,
+          "status": "exited",
+          "sys_us": 983,
+          "user_us": 5882,
+          "wall_ns": 7064662
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3360,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 4514,
+          "wall_ns": 4713402
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3316,
+          "status": "exited",
+          "sys_us": 945,
+          "user_us": 3799,
+          "wall_ns": 4955303
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 274127,
+      "stderr_lines": [],
+      "stdout_bytes": 12118,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/non-legacy/New Section 1 2.one",
+      "lines": {
+        "notebook": 1,
+        "page": 2,
+        "section": 1
+      },
+      "max_maxrss_kib": 3360,
+      "media": true,
+      "median_maxrss_kib": 3360,
+      "median_wall_ns": 5621731,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 3360,
+          "status": "exited",
+          "sys_us": 1992,
+          "user_us": 4981,
+          "wall_ns": 7140885
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3360,
+          "status": "exited",
+          "sys_us": 4377,
+          "user_us": 1095,
+          "wall_ns": 5621731
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3360,
+          "status": "exited",
+          "sys_us": 1821,
+          "user_us": 2730,
+          "wall_ns": 4706049
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 274127,
+      "stderr_lines": [],
+      "stdout_bytes": 12118,
+      "written": {
+        "bytes": 94875,
+        "files": 2
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/non-legacy/New Section 2.one",
+      "lines": {
+        "notebook": 1,
+        "page": 2,
+        "section": 1
+      },
+      "max_maxrss_kib": 2144,
+      "media": false,
+      "median_maxrss_kib": 2144,
+      "median_wall_ns": 1578969,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 756,
+          "user_us": 753,
+          "wall_ns": 1578969
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 767,
+          "user_us": 765,
+          "wall_ns": 1616227
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1488,
+          "wall_ns": 1577261
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 19912,
+      "stderr_lines": [],
+      "stdout_bytes": 1391,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/non-legacy/New Section 2.one",
+      "lines": {
+        "notebook": 1,
+        "page": 2,
+        "section": 1
+      },
+      "max_maxrss_kib": 2144,
+      "media": true,
+      "median_maxrss_kib": 2144,
+      "median_wall_ns": 1559966,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1470,
+          "wall_ns": 1547931
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 1483,
+          "user_us": 0,
+          "wall_ns": 1559966
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 1523,
+          "user_us": 0,
+          "wall_ns": 1598577
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 19912,
+      "stderr_lines": [],
+      "stdout_bytes": 1391,
+      "written": {
+        "bytes": 0,
+        "files": 0
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/non-legacy/New Section 3.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2144,
+      "media": false,
+      "median_maxrss_kib": 1968,
+      "median_wall_ns": 1053069,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 1968,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 848,
+          "wall_ns": 1054363
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 978,
+          "wall_ns": 1053069
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 1776,
+          "status": "exited",
+          "sys_us": 696,
+          "user_us": 0,
+          "wall_ns": 763313
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 9266,
+      "stderr_lines": [],
+      "stdout_bytes": 815,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/non-legacy/New Section 3.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2144,
+      "media": true,
+      "median_maxrss_kib": 2144,
+      "median_wall_ns": 1011859,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 963,
+          "user_us": 0,
+          "wall_ns": 1122256
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 633,
+          "user_us": 0,
+          "wall_ns": 739777
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2144,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 947,
+          "wall_ns": 1011859
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 9266,
+      "stderr_lines": [],
+      "stdout_bytes": 815,
+      "written": {
+        "bytes": 0,
+        "files": 0
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/Resources/AlternativePackaging.onetoc2",
+      "lines": {
+        "notebook": 1
+      },
+      "max_maxrss_kib": 2524,
+      "media": false,
+      "median_maxrss_kib": 2524,
+      "median_wall_ns": 1154185,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1114,
+          "wall_ns": 1197687
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1072,
+          "wall_ns": 1154185
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 1015,
+          "user_us": 0,
+          "wall_ns": 1078740
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 3711,
+      "stderr_lines": [],
+      "stdout_bytes": 133,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/Resources/AlternativePackaging.onetoc2",
+      "lines": {
+        "notebook": 1
+      },
+      "max_maxrss_kib": 2524,
+      "media": true,
+      "median_maxrss_kib": 2524,
+      "median_wall_ns": 1118712,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1038,
+          "wall_ns": 1118712
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 1089,
+          "user_us": 0,
+          "wall_ns": 1180547
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 1041,
+          "user_us": 0,
+          "wall_ns": 1117851
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 3711,
+      "stderr_lines": [],
+      "stdout_bytes": 133,
+      "written": {
+        "bytes": 0,
+        "files": 0
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/Resources/NoSection.onetoc2",
+      "lines": {
+        "notebook": 1
+      },
+      "max_maxrss_kib": 2524,
+      "media": false,
+      "median_maxrss_kib": 2524,
+      "median_wall_ns": 1868039,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 881,
+          "user_us": 880,
+          "wall_ns": 1868039
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 933,
+          "user_us": 932,
+          "wall_ns": 1954366
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2156,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1398,
+          "wall_ns": 1517896
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 9553,
+      "stderr_lines": [],
+      "stdout_bytes": 133,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/Resources/NoSection.onetoc2",
+      "lines": {
+        "notebook": 1
+      },
+      "max_maxrss_kib": 2524,
+      "media": true,
+      "median_maxrss_kib": 2524,
+      "median_wall_ns": 1891861,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 902,
+          "user_us": 904,
+          "wall_ns": 1895357
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2320,
+          "status": "exited",
+          "sys_us": 1628,
+          "user_us": 0,
+          "wall_ns": 1745575
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 1802,
+          "user_us": 0,
+          "wall_ns": 1891861
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 9553,
+      "stderr_lines": [],
+      "stdout_bytes": 133,
+      "written": {
+        "bytes": 0,
+        "files": 0
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/Resources/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1
+      },
+      "max_maxrss_kib": 2700,
+      "media": false,
+      "median_maxrss_kib": 2508,
+      "median_wall_ns": 2454143,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2700,
+          "status": "exited",
+          "sys_us": 1070,
+          "user_us": 2133,
+          "wall_ns": 3294916
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2508,
+          "status": "exited",
+          "sys_us": 1185,
+          "user_us": 1201,
+          "wall_ns": 2454143
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2332,
+          "status": "exited",
+          "sys_us": 1118,
+          "user_us": 1108,
+          "wall_ns": 2321302
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 18000,
+      "stderr_lines": [],
+      "stdout_bytes": 133,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/Resources/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1
+      },
+      "max_maxrss_kib": 2700,
+      "media": true,
+      "median_maxrss_kib": 2700,
+      "median_wall_ns": 3335396,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2496,
+          "status": "exited",
+          "sys_us": 2294,
+          "user_us": 0,
+          "wall_ns": 2358390
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2700,
+          "status": "exited",
+          "sys_us": 1078,
+          "user_us": 2150,
+          "wall_ns": 3335396
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2700,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 3299,
+          "wall_ns": 3391404
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 18000,
+      "stderr_lines": [],
+      "stdout_bytes": 133,
+      "written": {
+        "bytes": 0,
+        "files": 0
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/SUT/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1,
+        "page": 3,
+        "section": 3,
+        "skipped": 1
+      },
+      "max_maxrss_kib": 2992,
+      "media": false,
+      "median_maxrss_kib": 2944,
+      "median_wall_ns": 6706146,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2992,
+          "status": "exited",
+          "sys_us": 6953,
+          "user_us": 991,
+          "wall_ns": 8085624
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2660,
+          "status": "exited",
+          "sys_us": 2819,
+          "user_us": 3770,
+          "wall_ns": 6706146
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2944,
+          "status": "exited",
+          "sys_us": 2627,
+          "user_us": 3502,
+          "wall_ns": 6306320
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 18088,
+      "stderr_lines": [
+        "spike-ai-pipeline-onenote: warning: /Encryption.one: the section is skipped: Unexpected end of file"
+      ],
+      "stdout_bytes": 3909,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/interop/SUT/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1,
+        "page": 3,
+        "section": 3,
+        "skipped": 1
+      },
+      "max_maxrss_kib": 2984,
+      "media": true,
+      "median_maxrss_kib": 2968,
+      "median_wall_ns": 6177947,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2736,
+          "status": "exited",
+          "sys_us": 3754,
+          "user_us": 2818,
+          "wall_ns": 6694362
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2984,
+          "status": "exited",
+          "sys_us": 1907,
+          "user_us": 3923,
+          "wall_ns": 5918787
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2968,
+          "status": "exited",
+          "sys_us": 3011,
+          "user_us": 2968,
+          "wall_ns": 6177947
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 18088,
+      "stderr_lines": [
+        "spike-ai-pipeline-onenote: warning: /Encryption.one: the section is skipped: Unexpected end of file"
+      ],
+      "stdout_bytes": 3909,
+      "written": {
+        "bytes": 14660,
+        "files": 1
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/New Section Group/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1,
+        "page": 3,
+        "section": 2
+      },
+      "max_maxrss_kib": 2796,
+      "media": false,
+      "median_maxrss_kib": 2604,
+      "median_wall_ns": 2332215,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2796,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 2619,
+          "wall_ns": 2712619
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2604,
+          "status": "exited",
+          "sys_us": 1080,
+          "user_us": 1058,
+          "wall_ns": 2265256
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2532,
+          "status": "exited",
+          "sys_us": 1117,
+          "user_us": 1111,
+          "wall_ns": 2332215
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 2454,
+      "stderr_lines": [],
+      "stdout_bytes": 3486,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/New Section Group/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1,
+        "page": 3,
+        "section": 2
+      },
+      "max_maxrss_kib": 2620,
+      "media": true,
+      "median_maxrss_kib": 2620,
+      "median_wall_ns": 3675463,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2620,
+          "status": "exited",
+          "sys_us": 2702,
+          "user_us": 902,
+          "wall_ns": 3706527
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2616,
+          "status": "exited",
+          "sys_us": 2420,
+          "user_us": 0,
+          "wall_ns": 2566386
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2620,
+          "status": "exited",
+          "sys_us": 890,
+          "user_us": 2675,
+          "wall_ns": 3675463
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 2454,
+      "stderr_lines": [],
+      "stdout_bytes": 3486,
+      "written": {
+        "bytes": 104425,
+        "files": 2
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/non-legacy/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1,
+        "page": 5,
+        "section": 3
+      },
+      "max_maxrss_kib": 3860,
+      "media": false,
+      "median_maxrss_kib": 3724,
+      "median_wall_ns": 6441938,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 3724,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 5253,
+          "wall_ns": 5461165
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3860,
+          "status": "exited",
+          "sys_us": 3052,
+          "user_us": 3048,
+          "wall_ns": 10818683
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3680,
+          "status": "exited",
+          "sys_us": 2081,
+          "user_us": 4153,
+          "wall_ns": 6441938
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 4710,
+      "stderr_lines": [],
+      "stdout_bytes": 14234,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/non-legacy/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1,
+        "page": 5,
+        "section": 3
+      },
+      "max_maxrss_kib": 3728,
+      "media": true,
+      "median_maxrss_kib": 3680,
+      "median_wall_ns": 6140436,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 3728,
+          "status": "exited",
+          "sys_us": 1038,
+          "user_us": 5182,
+          "wall_ns": 6414253
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3552,
+          "status": "exited",
+          "sys_us": 2850,
+          "user_us": 2853,
+          "wall_ns": 5892998
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3680,
+          "status": "exited",
+          "sys_us": 992,
+          "user_us": 4949,
+          "wall_ns": 6140436
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 4710,
+      "stderr_lines": [],
+      "stdout_bytes": 14234,
+      "written": {
+        "bytes": 94875,
+        "files": 2
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/object-revision/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1
+      },
+      "max_maxrss_kib": 2524,
+      "media": false,
+      "median_maxrss_kib": 2524,
+      "median_wall_ns": 1185408,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 929,
+          "user_us": 0,
+          "wall_ns": 1044242
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2160,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1086,
+          "wall_ns": 1185408
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 1310,
+          "user_us": 0,
+          "wall_ns": 1404599
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 6464,
+      "stderr_lines": [],
+      "stdout_bytes": 139,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/object-revision/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1
+      },
+      "max_maxrss_kib": 2524,
+      "media": true,
+      "median_maxrss_kib": 2524,
+      "median_wall_ns": 1353795,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1260,
+          "wall_ns": 1346754
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 1255,
+          "user_us": 0,
+          "wall_ns": 1353795
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 668,
+          "user_us": 665,
+          "wall_ns": 1424904
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 6464,
+      "stderr_lines": [],
+      "stdout_bytes": 139,
+      "written": {
+        "bytes": 0,
+        "files": 0
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/OneNote_RecycleBin/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2524,
+      "media": false,
+      "median_maxrss_kib": 2524,
+      "median_wall_ns": 1235647,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 1477,
+          "user_us": 0,
+          "wall_ns": 1549656
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 904,
+          "user_us": 0,
+          "wall_ns": 1078878
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2336,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1138,
+          "wall_ns": 1235647
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 2251,
+      "stderr_lines": [],
+      "stdout_bytes": 932,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/OneNote_RecycleBin/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 2524,
+      "media": true,
+      "median_maxrss_kib": 2524,
+      "median_wall_ns": 1497046,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 1453,
+          "user_us": 0,
+          "wall_ns": 1531992
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2348,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 1264,
+          "wall_ns": 1362222
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 2524,
+          "status": "exited",
+          "sys_us": 1434,
+          "user_us": 0,
+          "wall_ns": 1497046
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 2251,
+      "stderr_lines": [],
+      "stdout_bytes": 932,
+      "written": {
+        "bytes": 0,
+        "files": 0
+      }
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 3756,
+      "media": false,
+      "median_maxrss_kib": 3756,
+      "median_wall_ns": 4901578,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 3756,
+          "status": "exited",
+          "sys_us": 1883,
+          "user_us": 2842,
+          "wall_ns": 4901578
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3756,
+          "status": "exited",
+          "sys_us": 2936,
+          "user_us": 3910,
+          "wall_ns": 7004083
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3580,
+          "status": "exited",
+          "sys_us": 0,
+          "user_us": 4599,
+          "wall_ns": 4824493
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 2245,
+      "stderr_lines": [
+        "spike-ai-pipeline-onenote: warning: /OneNote_RecycleBin: the recycle bin is skipped; its sections and pages are not read"
+      ],
+      "stdout_bytes": 11495,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "tests/fixtures/onenote-rs/Open Notebook.onetoc2",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 3676,
+      "media": true,
+      "median_maxrss_kib": 3676,
+      "median_wall_ns": 6072730,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 3676,
+          "status": "exited",
+          "sys_us": 977,
+          "user_us": 4863,
+          "wall_ns": 6072730
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3676,
+          "status": "exited",
+          "sys_us": 3046,
+          "user_us": 4054,
+          "wall_ns": 7275805
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 3592,
+          "status": "exited",
+          "sys_us": 1832,
+          "user_us": 2746,
+          "wall_ns": 4759481
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 2245,
+      "stderr_lines": [
+        "spike-ai-pipeline-onenote: warning: /OneNote_RecycleBin: the recycle bin is skipped; its sections and pages are not read"
+      ],
+      "stdout_bytes": 11495,
+      "written": {
+        "bytes": 94875,
+        "files": 2
+      }
+    },
+    {
+      "code": 0,
+      "input": "LargeData.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 19984,
+      "media": false,
+      "median_maxrss_kib": 19920,
+      "median_wall_ns": 1296338896,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 19872,
+          "status": "exited",
+          "sys_us": 563727,
+          "user_us": 737626,
+          "wall_ns": 1311064601
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 19920,
+          "status": "exited",
+          "sys_us": 551825,
+          "user_us": 730511,
+          "wall_ns": 1293143013
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 19984,
+          "status": "exited",
+          "sys_us": 565091,
+          "user_us": 718017,
+          "wall_ns": 1296338896
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 11288928,
+      "stderr_lines": [],
+      "stdout_bytes": 68902,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "LargeData.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 20000,
+      "media": true,
+      "median_maxrss_kib": 19824,
+      "median_wall_ns": 1307214337,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 20000,
+          "status": "exited",
+          "sys_us": 565142,
+          "user_us": 735518,
+          "wall_ns": 1307214337
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 19804,
+          "status": "exited",
+          "sys_us": 552301,
+          "user_us": 722629,
+          "wall_ns": 1285691859
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 19824,
+          "status": "exited",
+          "sys_us": 634827,
+          "user_us": 754435,
+          "wall_ns": 1400925261
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 11288928,
+      "stderr_lines": [],
+      "stdout_bytes": 68902,
+      "written": {
+        "bytes": 8127445,
+        "files": 2
+      }
+    },
+    {
+      "code": 0,
+      "input": "Large Desktop.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 138284,
+      "media": false,
+      "median_maxrss_kib": 138252,
+      "median_wall_ns": 253280619,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 138284,
+          "status": "exited",
+          "sys_us": 115536,
+          "user_us": 117558,
+          "wall_ns": 234504808
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 138124,
+          "status": "exited",
+          "sys_us": 115303,
+          "user_us": 132324,
+          "wall_ns": 253280619
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 138252,
+          "status": "exited",
+          "sys_us": 125174,
+          "user_us": 134126,
+          "wall_ns": 261011100
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 112965624,
+      "stderr_lines": [],
+      "stdout_bytes": 4816,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "Large Desktop.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 138148,
+      "media": true,
+      "median_maxrss_kib": 138072,
+      "median_wall_ns": 267140910,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 138148,
+          "status": "exited",
+          "sys_us": 116370,
+          "user_us": 135222,
+          "wall_ns": 253323844
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 137848,
+          "status": "exited",
+          "sys_us": 143054,
+          "user_us": 118394,
+          "wall_ns": 267140910
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 138072,
+          "status": "exited",
+          "sys_us": 141251,
+          "user_us": 127556,
+          "wall_ns": 273462387
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 112965624,
+      "stderr_lines": [],
+      "stdout_bytes": 4816,
+      "written": {
+        "bytes": 112889106,
+        "files": 11
+      }
+    },
+    {
+      "code": 0,
+      "input": "Large OneDrive.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 138440,
+      "media": false,
+      "median_maxrss_kib": 138132,
+      "median_wall_ns": 240309240,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 138440,
+          "status": "exited",
+          "sys_us": 119285,
+          "user_us": 119428,
+          "wall_ns": 240309240
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 138032,
+          "status": "exited",
+          "sys_us": 108412,
+          "user_us": 118500,
+          "wall_ns": 232525222
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 138132,
+          "status": "exited",
+          "sys_us": 110581,
+          "user_us": 130611,
+          "wall_ns": 246855009
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 161469274,
+      "stderr_lines": [],
+      "stdout_bytes": 4963,
+      "written": null
+    },
+    {
+      "code": 0,
+      "input": "Large OneDrive.one",
+      "lines": {
+        "notebook": 1,
+        "page": 1,
+        "section": 1
+      },
+      "max_maxrss_kib": 138360,
+      "media": true,
+      "median_maxrss_kib": 138328,
+      "median_wall_ns": 253030703,
+      "runs": [
+        {
+          "code": 0,
+          "maxrss_kib": 138328,
+          "status": "exited",
+          "sys_us": 119676,
+          "user_us": 139692,
+          "wall_ns": 260858983
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 138116,
+          "status": "exited",
+          "sys_us": 117306,
+          "user_us": 119503,
+          "wall_ns": 244851467
+        },
+        {
+          "code": 0,
+          "maxrss_kib": 138360,
+          "status": "exited",
+          "sys_us": 121196,
+          "user_us": 127241,
+          "wall_ns": 253030703
+        }
+      ],
+      "same_stdout_every_run": true,
+      "size": 161469274,
+      "stderr_lines": [],
+      "stdout_bytes": 4963,
+      "written": {
+        "bytes": 112889106,
+        "files": 11
+      }
+    }
+  ]
+}

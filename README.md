@@ -13,8 +13,9 @@ spike-ai-pipeline-processing runs like any other system tool. It reads files onl
 Microsoft 365 or the network, and calls no model.
 
 It is released by tag, `vX.Y.Z`, with a [CHANGELOG](CHANGELOG.md). Its finding for the spike's
-evidence 17 is in "Finding" below. The spike's question, evidence, and answer are in the root
-repository's README.
+evidence 17, the fields it recovers per kind and its time and peak memory per input, is
+[`docs/findings/onenote-cli.md`](docs/findings/onenote-cli.md), summarised in "Finding" below.
+The spike's question, evidence, and answer are in the root repository's README.
 
 ## Usage
 
@@ -295,16 +296,30 @@ beside it:
 Each set's `sources.json` lists every file with its source path, its pinned commit, its licence,
 and its SHA-256, and the tests check them. Every file reads as `tests/fixtures/sections.json` and
 `notebooks.json` expect: exit code, line kinds, sections, pages, titles, content kinds and their
-counts, skipped sections, and recognised words. `.onepkg` packages are built by the tests in
-memory, through cab 0.6.0's MSZIP writer, from the committed notebooks, and each must read as its
-directory does.
+counts, skipped sections, and recognised words. `tests/fixtures/content.json` gives content
+fields, each a JSON pointer into a page line and its value: styles, runs, links, note tags, list
+markers, tables, math, images, embedded files, ink, and recognised words. `.onepkg` packages are
+built by the tests in memory, through cab 0.6.0's MSZIP writer, from the committed notebooks, and
+each must read as its directory does.
 
 ## Finding
 
-> **Placeholder, filled in slice 10.** The finding for evidence 17, from a recorded run of the
-> static musl release binary: the public fixtures scored against their hand-written expectations
-> (`tests/fixtures/sections.json` and `notebooks.json`), and the time and peak resident memory
-> per input. No result is recorded yet.
+[`docs/findings/onenote-cli.md`](docs/findings/onenote-cli.md) records, from run `v0.1.0` of the
+static musl release binary, the public fixtures scored against their hand-written expectations,
+and the time and peak resident memory of every input, median of 3:
+
+- Every expected field recovered: 236 of 236 over the 14 committed sections
+  (`sections.json`), 138 of 138 over the 9 committed notebooks (`notebooks.json`), and 129 of
+  129 content fields (`content.json`), with every expected absence absent. There is no authored
+  hand truth.
+- Every committed input reads in under 10 ms and 4.5 MiB. Interop-TestSuites' `LargeData.one`
+  (11 MB) reads in 1.30 s at 19.5 MiB; onenote.rs's `Large Desktop.one` (113 MB) and
+  `Large OneDrive.one` (161 MB) in 0.25 s at 135 MiB each.
+- onenote_parser issue #48 doesn't show at 161 MB: the OneDrive-format section peaks where its
+  desktop-format twin does. It stays a limit for large, long-edited OneDrive sections.
+- An image with no stored extension is named for its filename's, as the contract says, so
+  `Large Desktop.one`'s printout images, PNG bytes with filenames ending `.pdf`, are written as
+  `.pdf`; `Large OneDrive.one` stores `png` for the same images.
 
 ## Known limits
 
@@ -344,6 +359,8 @@ it on linux-x64 and linux-arm64, on every pull request into main and every push 
 `scripts/release-pack.sh <target> <tag>` builds and packs one release archive, refusing a tag
 that isn't the binary's version; the release workflow runs it on each architecture for a pushed
 `vX.Y.Z` tag. `mise run currency` reports every crate, mise tool, and Action pin behind its latest.
+`mise run findings` runs the finding
+([`docs/findings/onenote-cli.md`](docs/findings/onenote-cli.md), "Rerunning").
 
 ## Licence
 

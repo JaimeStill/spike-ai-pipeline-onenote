@@ -62,7 +62,11 @@ here.
 - Fixtures: Interop-TestSuites' small MS-ONESTORE files (MIT, at `fe87ed32`) and onenote.rs's
   maintainer samples (MPL-2.0, at `v2.1.0`), each set pinned and listed by SHA-256 with its
   LICENSE, read against hand-written structural expectations; `.onepkg` packages built by the
-  tests through cab 0.6.0's MSZIP writer, each read as its directory.
+  tests through cab 0.6.0's MSZIP writer, each read as its directory; and content fields, each a
+  JSON pointer into a page line, in `tests/fixtures/content.json`.
+- The finding (`docs/findings/onenote-cli.md`), from recorded run v0.1.0: the fields recovered
+  per kind against the public fixtures' expectations, and the time and peak memory on every
+  committed input and on three large sections fetched for the run; `mise run findings` reruns it.
 - Releases: `spike-ai-pipeline-onenote-vX.Y.Z-linux-x64.tar.gz` and `-linux-arm64.tar.gz`, each a
   static musl binary, LICENSE, and `THIRD-PARTY-NOTICES.md`, and `SHA256SUMS`. The notices give
   onenote_parser's MPL-2.0 licence and where its source is, one2html's MIT notice for the ported
