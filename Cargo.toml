@@ -8,3 +8,13 @@ repository = "https://github.com/JaimeStill/spike-ai-pipeline-onenote"
 publish = false
 
 [dependencies]
+# The OneNote reader (MPL-2.0), used unmodified: sections, notebooks, and, through onepkg,
+# packages. It brings cab 0.6 for .onepkg, and time and typed-path, which its API takes and
+# returns.
+onenote_parser = { version = "2.1.0", features = ["onepkg"] }
+typed-path = "0.12.4"
+time = { version = "0.3.55", features = ["macros"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+# dup2, to point file descriptor 1 at /dev/null while onenote_parser runs (src/stdout.rs).
+libc = "0.2.191"
