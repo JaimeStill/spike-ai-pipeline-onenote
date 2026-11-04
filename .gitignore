@@ -4,3 +4,6 @@
 
 # Build output.
 target/
+
+# Untracked state: the findings run's downloads, builds and outputs.
+.state/

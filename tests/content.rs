@@ -318,3 +318,29 @@ fn the_rest_of_the_outline_in_order() {
         assert_eq!(items[19]["blocks"].as_array().unwrap().len(), 1, "{file}");
     }
 }
+
+/// Every field of tests/fixtures/content.json, the content expectations the finding scores
+/// (bench/findings.rs), holds in its page's read: the value at its pointer, or no value for a
+/// null.
+#[test]
+fn every_content_expectation_holds() {
+    let bytes = std::fs::read(fixture("content.json")).unwrap();
+    let expectations: Value = serde_json::from_slice(&bytes).unwrap();
+    for entry in expectations["pages"].as_array().unwrap() {
+        for file in entry["files"].as_array().unwrap() {
+            let file = file.as_str().unwrap();
+            let out = run(&[fixture(file)]);
+            assert_eq!(out.code, Some(0), "{file}: {}", out.stderr);
+            let page = out
+                .lines()
+                .into_iter()
+                .find(|line| line["line"] == "page" && line["id"] == entry["page"])
+                .unwrap_or_else(|| panic!("{file}: no page {}", entry["page"]));
+            for field in entry["fields"].as_array().unwrap() {
+                let pointer = field["pointer"].as_str().unwrap();
+                let want = Some(&field["value"]).filter(|value| !value.is_null());
+                assert_eq!(page.pointer(pointer), want, "{file}: {pointer}");
+            }
+        }
+    }
+}

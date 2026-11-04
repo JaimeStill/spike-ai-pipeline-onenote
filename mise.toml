@@ -21,3 +21,7 @@ cargo build --release --locked --target "$target"
 [tasks.currency]
 description = "Report every crate, mise tool, and GitHub Action pin behind its latest; writes nothing"
 run = "scripts/currency.sh"
+
+[tasks.findings]
+description = "Score the CLI's fields against the public fixtures' expectations and time it on every committed input and three large sections; on the laptop, never in CI or the check; writes only .state/findings/ and prints the tables, unless `-- --record [name]` records the run in a new docs/findings/onenote-cli/runs/<name>/ (<date>-<n> by default)"
+run = "scripts/findings.sh"

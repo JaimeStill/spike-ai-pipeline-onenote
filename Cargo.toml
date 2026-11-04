@@ -33,3 +33,9 @@ finl_unicode = { version = "1.5.1", default-features = false, features = ["categ
 time = { version = "0.3.55", features = ["macros"] }
 # An XML reader, so the tests check each ink SVG is well-formed; the CLI writes SVG itself.
 roxmltree = "0.21.2"
+
+# The findings run's scorer (scripts/findings.sh, `mise run findings`): the check compiles it
+# and never runs it.
+[[example]]
+name = "findings"
+path = "bench/findings.rs"
