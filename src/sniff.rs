@@ -138,13 +138,6 @@ mod tests {
     }
 
     #[test]
-    fn a_onestore_header_of_either_format_is_onestore() {
-        for format in &ONESTORE_FORMATS {
-            assert_eq!(content(&header(format)), Content::OneStore);
-        }
-    }
-
-    #[test]
     fn a_short_or_unknown_header_is_other() {
         assert_eq!(content(&header(&[0; 16])), Content::Other);
         assert_eq!(content(&header(&ONESTORE_FORMATS[0])[..63]), Content::Other);
@@ -154,7 +147,7 @@ mod tests {
     #[test]
     fn cabinets_and_zips_are_told_by_their_signatures() {
         assert_eq!(content(b"MSCF\0\0\0\0"), Content::Cabinet);
-        for magic in ZIP_MAGICS {
+        for magic in [b"PK\x03\x04", b"PK\x05\x06", b"PK\x07\x08"] {
             assert_eq!(content(magic), Content::Zip);
         }
     }

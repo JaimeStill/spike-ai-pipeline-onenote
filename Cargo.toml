@@ -13,8 +13,12 @@ publish = false
 # returns.
 onenote_parser = { version = "2.1.0", features = ["onepkg"] }
 typed-path = "0.12.4"
-time = { version = "0.3.55", features = ["macros"] }
+time = "0.3.55"
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
 # dup2, to point file descriptor 1 at /dev/null while onenote_parser runs (src/stdout.rs).
 libc = "0.2.191"
+
+[dev-dependencies]
+# utc_datetime!, for the unit tests' times.
+time = { version = "0.3.55", features = ["macros"] }
