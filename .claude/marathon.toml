@@ -1,16 +1,16 @@
 # Project kind: this layer holds the Rust OneNote CLI, checked by `mise run check` (shellcheck,
-# rustfmt, clippy with warnings denied, tests, and a static musl release build). Its goals live in
-# the coordinator's roadmap (standards-lab/context/roadmap.toml), under
-# experiment.ai.spike-ai-pipeline. `mise run currency` reports every crate and mise tool behind
-# its latest. No gate.
+# rustfmt, clippy with warnings denied, the third-party notices against the linked crates, tests,
+# and a static musl release build). Its goals live in the coordinator's roadmap (standards-lab/context/roadmap.toml), under
+# experiment.ai.spike-ai-pipeline. `mise run currency` reports every crate, mise tool, and GitHub
+# Action pin behind its latest. No gate.
 [project]
 kind = "code"
 check = "mise run check"
 currency = "mise run currency"
 
-# Remote platform and the commands that publish and merge a finished branch. No CI runs yet, so
-# the merge doesn't wait on pull-request checks; the task that adds CI makes it wait.
+# Remote platform and the commands that publish and merge a finished branch. The merge waits on
+# the pull request's checks, CI's check on x64 and arm64, and merges only once they pass.
 [remote]
 platform = "github"
 publish = "gh pr create"
-merge = "gh pr merge --merge --delete-branch"
+merge = "gh pr checks --watch && gh pr merge --merge --delete-branch"

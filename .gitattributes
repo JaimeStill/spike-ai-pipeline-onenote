@@ -1,0 +1,3 @@
+# The public fixture sets are kept as upstream wrote them, so their SHA-256s hold.
+tests/fixtures/interop/** -text
+tests/fixtures/onenote-rs/** -text
