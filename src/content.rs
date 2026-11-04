@@ -18,7 +18,7 @@ use crate::ink::{self, Stroke};
 use crate::math::{self, Object};
 use crate::media::{self, Media};
 use crate::model::{self, Block, Container, Item, Offsets};
-use crate::section::iso8601;
+use crate::section::{iso8601, text};
 use crate::{Fault, warn};
 
 /// A page's content and its own ink.
@@ -367,11 +367,6 @@ impl Reader<'_> {
         warn(place, &format!("no file: {problem}"));
         Ok(None)
     }
-}
-
-/// A stored string, or none when it is empty.
-fn text(value: Option<&str>) -> Option<String> {
-    value.filter(|text| !text.is_empty()).map(str::to_owned)
 }
 
 /// A stored run, by what it becomes.

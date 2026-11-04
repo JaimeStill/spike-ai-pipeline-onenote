@@ -1,5 +1,5 @@
-//! The media directory. Each distinct content of an image or an embedded file is one file there,
-//! named by the lowercase hex SHA-256 of its bytes and, when the stored extension is 1 to 8
+//! The media directory. Each distinct content of an image, an embedded file or an ink drawing is
+//! one file there, named by the lowercase hex SHA-256 of its bytes and, when the stored extension is 1 to 8
 //! ASCII letters and digits, "." and that extension. A stored filename is never part of a path.
 //! Without --media the names are worked out the same way and nothing is written.
 

@@ -93,7 +93,6 @@ fn page_line(
     place: &str,
     media: &mut Media,
 ) -> Result<model::Page, Fault> {
-    let text = |value: Option<&str>| value.filter(|text| !text.is_empty()).map(str::to_owned);
     let id = guid(page.link_target_id());
     let read = content::page(page, media, &format!("{place}, page {id}"))?;
     Ok(model::Page {
@@ -158,6 +157,11 @@ pub fn place(path: &[String]) -> String {
 /// kind isn't public, so this reads ErrorKind::NotASectionFile's message.
 fn is_toc(err: &Error) -> bool {
     err.to_string().starts_with("Not a section file: ")
+}
+
+/// A stored string, or none when it is empty.
+pub fn text(value: Option<&str>) -> Option<String> {
+    value.filter(|text| !text.is_empty()).map(str::to_owned)
 }
 
 /// A host path as onenote_parser takes it, from its bytes, so a path that isn't UTF-8 reads.
