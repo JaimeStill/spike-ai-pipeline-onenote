@@ -184,6 +184,8 @@ out; neighbouring runs of the same formatting and link are one.
 | Field | Value |
 | --- | --- |
 | `text` | Its text. |
+| `math` | An equation's: `"display"` or `"inline"`, below. |
+| `latex` | An equation's LaTeX, below. |
 | `bold`, `italic`, `underline`, `strikethrough`, `superscript`, `subscript` | `true` when set. |
 | `highlight`, `font_color` | `"#rrggbb"`. |
 | `link` | The link's target. A link OneNote recognised in typed text targets its own text. |
