@@ -1,6 +1,7 @@
 //! A page's content: its title and its containers, mapped from onenote_parser's model into
-//! schema "1"'s, with outline items nested as stored, paragraphs split into runs, and images',
-//! embedded files' and ink drawings' contents named, and written, by the media directory.
+//! schema "1"'s, with outline items nested as stored, paragraphs split into runs, equations read
+//! as LaTeX, and images', embedded files' and ink drawings' contents named, and written, by the
+//! media directory.
 
 use std::io::Read;
 use std::ops::Range;
@@ -14,6 +15,7 @@ use onenote_parser::property::common::ColorRef;
 use onenote_parser::property::embedded_file::FileType;
 
 use crate::ink::{self, Stroke};
+use crate::math::{self, Object};
 use crate::media::{self, Media};
 use crate::model::{self, Block, Container, Item, Offsets};
 use crate::section::iso8601;
@@ -36,6 +38,7 @@ pub fn page(page: &Page, media: &mut Media, place: &str) -> Result<PageRead, Fau
         place,
         images: 0,
         files: 0,
+        equations: 0,
     };
     let mut page_strokes = Vec::new();
     let mut containers = Vec::new();
@@ -104,12 +107,13 @@ fn outline_offsets(outline: &Outline) -> Offsets {
 }
 
 /// One page's read: the media its images and embedded files go to, and the counts that name
-/// each in a warning, in the order they are read.
+/// each image, embedded file and equation in a warning, in the order they are read.
 struct Reader<'a> {
     media: &'a mut Media,
     place: &'a str,
     images: usize,
     files: usize,
+    equations: usize,
 }
 
 impl Reader<'_> {
@@ -135,7 +139,7 @@ impl Reader<'_> {
             blocks.push(match content {
                 Content::RichText(text) => {
                     let marker = if index == 0 { list.take() } else { None };
-                    let mut paragraph = paragraph(text, marker);
+                    let mut paragraph = self.paragraph(text, marker);
                     if !text.embedded_objects().is_empty() {
                         let strokes = ink::flow(ink::pieces(text.embedded_objects()));
                         paragraph.ink = self.drawing(&strokes)?;
@@ -158,6 +162,100 @@ impl Reader<'_> {
         Ok(Item::Element {
             blocks,
             children: self.items(element.children())?,
+        })
+    }
+
+    fn paragraph(&mut self, text: &RichText, list: Option<model::List>) -> model::Paragraph {
+        model::Paragraph {
+            style: text
+                .paragraph_style()
+                .style_id()
+                .filter(|style| !style.is_empty())
+                .map(str::to_owned),
+            list,
+            tags: tags(text.note_tags()),
+            runs: self.runs(text),
+            ink: None,
+        }
+    }
+
+    /// A paragraph's visible runs. Each stored formatting covers the text up to its run index,
+    /// counted in UTF-16 code units, and the last covers the rest. Hidden runs are left out,
+    /// an equation is one run, and neighbours left with the same formatting are joined.
+    fn runs(&mut self, text: &RichText) -> Vec<model::Run> {
+        let units: Vec<u16> = text.text().encode_utf16().collect();
+        let styles = text.text_run_formatting();
+        let default = ParagraphStyling::default();
+        // A paragraph with text and no formatting is one run, unformatted.
+        let styles: Vec<&ParagraphStyling> = if styles.is_empty() {
+            vec![&default]
+        } else {
+            styles.iter().collect()
+        };
+        let stored = ranges(units.len(), text.text_run_indices(), styles.len())
+            .into_iter()
+            .zip(styles)
+            .map(|(range, style)| {
+                let stored = if style.math_formatting() {
+                    Stored::Math
+                } else if range.is_empty() || style.hidden() {
+                    Stored::Skipped
+                } else {
+                    Stored::Text(
+                        model::Run {
+                            bold: style.bold(),
+                            italic: style.italic(),
+                            underline: style.underline(),
+                            strikethrough: style.strikethrough(),
+                            superscript: style.superscript(),
+                            subscript: style.subscript(),
+                            highlight: style.highlight().and_then(color),
+                            font_color: style.font_color().and_then(color),
+                            ..model::Run::default()
+                        },
+                        style.hyperlink(),
+                    )
+                };
+                (range, stored)
+            })
+            .collect();
+        let objects: Vec<Object> = text
+            .math_inline_objects()
+            .iter()
+            .map(Object::from)
+            .collect();
+        let mut pieces = pieces(&units, stored, &objects);
+        let links: Vec<(Range<usize>, String)> = text
+            .hyperlinks()
+            .iter()
+            .map(|link| {
+                (
+                    link.start() as usize..link.end() as usize,
+                    link.target().to_owned(),
+                )
+            })
+            .collect();
+        link(&mut pieces, &links);
+        for piece in &mut pieces {
+            if let Some(parts) = piece.equation.take() {
+                piece.run.math = Some("inline");
+                piece.run.latex = Some(self.latex(parts));
+            }
+        }
+        let mut runs = join(pieces);
+        math_modes(&mut runs);
+        runs
+    }
+
+    /// An equation's LaTeX. One whose markers don't parse is the LaTeX of its text alone,
+    /// with a warning naming it by its number on the page.
+    fn latex(&mut self, parts: Vec<(String, Object)>) -> String {
+        self.equations += 1;
+        let text: String = parts.iter().map(|(text, _)| text.as_str()).collect();
+        math::latex(parts).unwrap_or_else(|reason| {
+            let place = format!("{}, equation {}", self.place, self.equations);
+            warn(&place, &format!("its structure is lost: {reason}"));
+            math::latex_of_text(&text)
         })
     }
 
@@ -276,75 +374,78 @@ fn text(value: Option<&str>) -> Option<String> {
     value.filter(|text| !text.is_empty()).map(str::to_owned)
 }
 
-fn paragraph(text: &RichText, list: Option<model::List>) -> model::Paragraph {
-    model::Paragraph {
-        style: text
-            .paragraph_style()
-            .style_id()
-            .filter(|style| !style.is_empty())
-            .map(str::to_owned),
-        list,
-        tags: tags(text.note_tags()),
-        runs: runs(text),
-        ink: None,
-    }
+/// A stored run, by what it becomes.
+enum Stored {
+    /// Visible text: its formatting, and whether it is styled as a link.
+    Text(model::Run, bool),
+    /// A math-formatted run: a part of an equation.
+    Math,
+    /// A hidden run, which holds a link's target among others, or an empty one: left out.
+    Skipped,
 }
 
-/// A paragraph's visible runs. Each stored formatting covers the text up to its run index,
-/// counted in UTF-16 code units, and the last covers the rest. Hidden runs, which hold a
-/// link's target among others, are left out, and neighbours left with the same formatting are
-/// joined into one run.
-fn runs(text: &RichText) -> Vec<model::Run> {
-    let units: Vec<u16> = text.text().encode_utf16().collect();
-    let styles = text.text_run_formatting();
-    let default = ParagraphStyling::default();
-    // A paragraph with text and no formatting is one run, unformatted.
-    let styles: Vec<&ParagraphStyling> = if styles.is_empty() {
-        vec![&default]
-    } else {
-        styles.iter().collect()
-    };
-    let mut pieces: Vec<Piece> = ranges(units.len(), text.text_run_indices(), styles.len())
-        .into_iter()
-        .zip(styles)
-        .filter(|(range, style)| !range.is_empty() && !style.hidden())
-        .map(|(range, style)| Piece {
-            run: model::Run {
-                text: String::from_utf16_lossy(&units[range.clone()]),
-                bold: style.bold(),
-                italic: style.italic(),
-                underline: style.underline(),
-                strikethrough: style.strikethrough(),
-                superscript: style.superscript(),
-                subscript: style.subscript(),
-                highlight: style.highlight().and_then(color),
-                font_color: style.font_color().and_then(color),
-                link: None,
-            },
-            range,
-            hyperlink: style.hyperlink(),
-        })
-        .collect();
-    let links: Vec<(Range<usize>, String)> = text
-        .hyperlinks()
-        .iter()
-        .map(|link| {
-            (
-                link.start() as usize..link.end() as usize,
-                link.target().to_owned(),
-            )
-        })
-        .collect();
-    link(&mut pieces, &links);
-    join(pieces)
-}
-
-/// A run as it is cut from the paragraph: its UTF-16 range, and whether it is styled as a
-/// link.
+/// A run as it is cut from the paragraph: its UTF-16 range, whether it is styled as a link,
+/// and, for an equation, its stored runs, each with its math object.
 struct Piece {
     range: Range<usize>,
     run: model::Run,
     hyperlink: bool,
+    equation: Option<Vec<(String, Object)>>,
+}
+
+/// The pieces of a paragraph's stored runs over its UTF-16 `units`. Consecutive math runs are
+/// one equation, ended by any other stored run. The math objects go to the math runs in order,
+/// one each, as onenote_parser reads them; a math run past the last object has none, which
+/// fails its equation's parse if the run holds a marker.
+fn pieces(units: &[u16], stored: Vec<(Range<usize>, Stored)>, objects: &[Object]) -> Vec<Piece> {
+    let mut objects = objects.iter().copied();
+    let mut pieces: Vec<Piece> = Vec::new();
+    let mut in_equation = false;
+    for (range, stored) in stored {
+        let text = String::from_utf16_lossy(&units[range.clone()]);
+        match stored {
+            Stored::Math => {
+                let part = (text, objects.next().unwrap_or_default());
+                match pieces.last_mut() {
+                    Some(Piece {
+                        range: last,
+                        equation: Some(parts),
+                        ..
+                    }) if in_equation => {
+                        last.end = range.end;
+                        parts.push(part);
+                    }
+                    _ => pieces.push(Piece {
+                        range,
+                        run: model::Run::default(),
+                        hyperlink: false,
+                        equation: Some(vec![part]),
+                    }),
+                }
+                in_equation = true;
+            }
+            Stored::Text(run, hyperlink) => {
+                pieces.push(Piece {
+                    range,
+                    run: model::Run { text, ..run },
+                    hyperlink,
+                    equation: None,
+                });
+                in_equation = false;
+            }
+            Stored::Skipped => in_equation = false,
+        }
+    }
+    pieces
+}
+
+/// The display mode of a paragraph's runs' equations: "display" for an equation that is its
+/// paragraph's only run, "inline" for any other.
+fn math_modes(runs: &mut [model::Run]) {
+    let display = runs.len() == 1;
+    for run in runs.iter_mut().filter(|run| run.math.is_some()) {
+        run.math = Some(if display { "display" } else { "inline" });
+    }
 }
 
 /// The UTF-16 ranges of `count` runs over `len` code units, ended by `indices`. The last run
@@ -367,12 +468,12 @@ fn ranges(len: usize, indices: &[u32], count: usize) -> Vec<Range<usize>> {
         .collect()
 }
 
-/// Gives each run its link target. A run that starts inside one of onenote_parser's
+/// Gives each run but an equation its link target. A run that starts inside one of onenote_parser's
 /// hyperlinks, whose targets come from the hidden HYPERLINK fields, takes its target. A run
 /// styled as a link outside any of them is a link OneNote recognised in typed text, and its
 /// target is its own text, joined across the neighbouring link-styled runs it spans.
 fn link(pieces: &mut [Piece], links: &[(Range<usize>, String)]) {
-    for piece in pieces.iter_mut() {
+    for piece in pieces.iter_mut().filter(|piece| piece.equation.is_none()) {
         piece.run.link = links
             .iter()
             .find(|(range, _)| range.contains(&piece.range.start))
@@ -406,12 +507,19 @@ fn link(pieces: &mut [Piece], links: &[(Range<usize>, String)]) {
     }
 }
 
-/// The runs, with neighbours of the same formatting and link joined.
+/// The runs, with neighbours of the same formatting and link joined; an equation is never
+/// joined.
 fn join(pieces: Vec<Piece>) -> Vec<model::Run> {
     let mut runs: Vec<model::Run> = Vec::with_capacity(pieces.len());
     for piece in pieces {
         match runs.last_mut() {
-            Some(last) if same_format(last, &piece.run) => last.text.push_str(&piece.run.text),
+            Some(last)
+                if last.math.is_none()
+                    && piece.run.math.is_none()
+                    && same_format(last, &piece.run) =>
+            {
+                last.text.push_str(&piece.run.text)
+            }
             _ => runs.push(piece.run),
         }
     }
@@ -519,6 +627,7 @@ mod tests {
                 ..model::Run::default()
             },
             hyperlink,
+            equation: None,
         }
     }
 
@@ -584,6 +693,99 @@ mod tests {
         assert_eq!(texts, ["abc", "def"]);
     }
 
+    fn math_object(kind: onenote_parser::contents::MathObjectType, args: u32) -> Object {
+        Object {
+            kind,
+            args,
+            ..Object::default()
+        }
+    }
+
+    /// Consecutive math runs are one equation, which takes the math objects in order, one per
+    /// math run; text, a hidden run or an empty one ends it.
+    #[test]
+    fn consecutive_math_runs_are_one_equation() {
+        use onenote_parser::contents::MathObjectType as T;
+        let text = "x: \u{fdd0}𝑎\u{fdee}2\u{fdef}+𝑏 or 𝑐";
+        let units: Vec<u16> = text.encode_utf16().collect();
+        // "x: ", then the superscript's three runs, "+𝑏", a hidden empty run, " or ", "𝑐".
+        let stored = vec![
+            (0..3, Stored::Text(model::Run::default(), false)),
+            (3..4, Stored::Math),
+            (4..7, Stored::Math),
+            (7..9, Stored::Math),
+            (9..12, Stored::Math),
+            (12..12, Stored::Skipped),
+            (12..16, Stored::Text(model::Run::default(), false)),
+            (16..18, Stored::Math),
+        ];
+        let objects = [
+            math_object(T::Superscript, 2),
+            math_object(T::Superscript, 0),
+            math_object(T::Superscript, 1),
+            math_object(T::PlainText, 0),
+            math_object(T::PlainText, 0),
+        ];
+        let pieces = pieces(&units, stored, &objects);
+        let texts: Vec<&str> = pieces.iter().map(|p| p.run.text.as_str()).collect();
+        assert_eq!(texts, ["x: ", "", " or ", ""]);
+        let ranges: Vec<Range<usize>> = pieces.iter().map(|p| p.range.clone()).collect();
+        assert_eq!(ranges, [0..3, 3..12, 12..16, 16..18]);
+        let first = pieces[1].equation.as_ref().unwrap();
+        let parts: Vec<&str> = first.iter().map(|(text, _)| text.as_str()).collect();
+        assert_eq!(parts, ["\u{fdd0}", "𝑎\u{fdee}", "2\u{fdef}", "+𝑏"]);
+        assert_eq!(first[0].1, objects[0]);
+        assert_eq!(first[3].1, objects[3]);
+        assert_eq!(math::latex(first.clone()), Ok("a^{2}+b".to_owned()));
+        let second = pieces[3].equation.as_ref().unwrap();
+        assert_eq!(second, &vec![("𝑐".to_owned(), objects[4])]);
+    }
+
+    /// A math run past the last stored object has none, and its equation's markers don't
+    /// parse; its text alone is still read.
+    #[test]
+    fn a_math_run_without_an_object_has_none() {
+        let text = "\u{fdd0}𝑥\u{fdef}";
+        let units: Vec<u16> = text.encode_utf16().collect();
+        let pieces = pieces(&units, vec![(0..4, Stored::Math)], &[]);
+        let parts = pieces[0].equation.clone().unwrap();
+        assert_eq!(parts[0].1, Object::default());
+        assert!(math::latex(parts).is_err());
+        assert_eq!(math::latex_of_text(text), "x");
+    }
+
+    fn equation(latex: &str) -> Piece {
+        Piece {
+            range: 0..0,
+            run: model::Run {
+                math: Some("inline"),
+                latex: Some(latex.to_owned()),
+                ..model::Run::default()
+            },
+            hyperlink: false,
+            equation: None,
+        }
+    }
+
+    /// Two equations side by side stay two runs, even with the same LaTeX.
+    #[test]
+    fn equations_never_join() {
+        let runs = join(vec![equation("x"), equation("x"), piece(0..1, "y", false)]);
+        assert_eq!(runs.len(), 3);
+    }
+
+    /// An equation is display math when it is its paragraph's only run, inline otherwise.
+    #[test]
+    fn an_equation_alone_is_display_math() {
+        let mut alone = join(vec![equation("x")]);
+        math_modes(&mut alone);
+        assert_eq!(alone[0].math, Some("display"));
+        let mut beside = join(vec![piece(0..2, "a ", false), equation("x")]);
+        math_modes(&mut beside);
+        assert_eq!(beside[1].math, Some("inline"));
+        assert_eq!(beside[0].math, None);
+    }
+
     #[test]
     fn colours_are_hex_and_auto_has_none() {
         assert_eq!(
@@ -607,6 +809,7 @@ mod tests {
             place: "/Section, page 1",
             images: 0,
             files: 0,
+            equations: 0,
         };
         for status in [FileDataStatus::Missing, FileDataStatus::Invalid] {
             let read: Box<dyn Read> = Box::new(&b"bytes"[..]);

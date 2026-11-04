@@ -20,6 +20,9 @@ serde_json = "1.0.154"
 libc = "0.2.191"
 # SHA-256, which names each media file by its content.
 sha2 = "0.11.1"
+# Unicode general categories, which the math port (src/math/), as one2html, sorts an
+# equation's characters by.
+finl_unicode = { version = "1.5.1", default-features = false, features = ["categories"] }
 
 [dev-dependencies]
 # utc_datetime!, for the unit tests' times.

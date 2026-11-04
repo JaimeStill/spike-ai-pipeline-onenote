@@ -283,9 +283,9 @@ fn tables_hold_rows_of_cells() {
     }
 }
 
-/// The rest of the main outline, in order: paragraphs and blank lines, an equation, still a
-/// plain italic run until math is read, and an image block, whose fields tests/media.rs
-/// checks.
+/// The rest of the main outline, in order: paragraphs and blank lines, an equation, and an
+/// image block, whose fields tests/media.rs checks. The equation, the math italic 𝑎=𝑏 alone
+/// in its paragraph, is one display math run of LaTeX `a=b`.
 #[test]
 fn the_rest_of_the_outline_in_order() {
     for file in SAMPLES {
@@ -303,7 +303,10 @@ fn the_rest_of_the_outline_in_order() {
             (13, blank()),
             (14, blank()),
             (16, blank()),
-            (17, element("p", json!([{"text": "𝑎=𝑏", "italic": true}]))),
+            (
+                17,
+                element("p", json!([{"math": "display", "latex": "a=b"}])),
+            ),
             (18, blank()),
             (20, blank()),
             (21, blank()),

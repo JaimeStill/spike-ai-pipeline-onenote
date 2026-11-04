@@ -301,11 +301,22 @@ pub struct Cell {
     pub items: Vec<Item>,
 }
 
-/// A run of text with one formatting. A flag that isn't set, and a colour that is automatic,
-/// are left out.
+/// A run of text with one formatting, or an equation. A flag that isn't set, and a colour that
+/// is automatic, are left out.
+///
+/// An equation, a paragraph's consecutive math-formatted runs, is one run of its own: its
+/// `math` and its `latex`, with no text, flags, colours or link. Its stored text is RichEdit's
+/// linear format, its markers and math alphanumerics meaningful only as the LaTeX reads them.
 #[derive(Serialize, Clone, Debug, Default, PartialEq)]
 pub struct Run {
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub text: String,
+    /// An equation's mode: "display" when it is its paragraph's only content, else "inline".
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub math: Option<&'static str>,
+    /// An equation's LaTeX, bare, without `$` or `\(` around it.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latex: Option<String>,
     #[serde(skip_serializing_if = "is_false")]
     pub bold: bool,
     #[serde(skip_serializing_if = "is_false")]

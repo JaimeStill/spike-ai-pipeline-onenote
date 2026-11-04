@@ -156,6 +156,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "finl_unicode"
+version = "1.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "09ded33109e99472f809cb7495544506eea45e366725dacf2a383e184f660456"
+
+[[package]]
 name = "flate2"
 version = "1.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -502,6 +508,7 @@ checksum = "0c790de23124f9ab44544d7ac05d60440adc586479ce501c1d6d7da3cd8c9cf5"
 name = "spike-ai-pipeline-onenote"
 version = "0.0.0"
 dependencies = [
+ "finl_unicode",
  "libc",
  "onenote_parser",
  "roxmltree",
