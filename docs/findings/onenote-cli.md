@@ -6,9 +6,8 @@ expectations, and its time and peak memory on every committed input and on three
 fetched for the run, Interop-TestSuites' `LargeData.one` (11 MB) and onenote.rs's
 `Large Desktop.one` (113 MB) and `Large OneDrive.one` (161 MB). It measures the CLI alone, with
 no baseline against other readers. There is no authored notebook, and so no authored hand truth:
-OneNote for the web wouldn't create one, and v0.1.0 ships without it (the goal record's
-escalation of 2026-11-04); a later release adds it. Processing's onenote adapter, the rest of
-evidence 17, belongs to processing's onenote task.
+OneNote for the web wouldn't create one, so v0.1.0 ships without it, and a later release adds it.
+Processing's onenote adapter, the rest of evidence 17, belongs to processing's onenote task.
 
 Every number here comes from run
 [`onenote-cli/runs/v0.1.0/results.json`](onenote-cli/runs/v0.1.0/results.json), on the laptop on
@@ -185,9 +184,9 @@ core does the work.
 section of one page, "testing - large", holding 135 images and one embedded file, each with the
 filename `testing - large.docx` and no stored extension. All 135 images are one content,
 8,106,671 bytes, which begins as a ZIP does (`PK`); the embedded file is another, 20,774 bytes; so
-`--media` writes 2 files, both named `.docx`. The CLI reads each image's bytes to hash them for its name, about
-1.09 GB in all, which is where the time goes: 1.3 s for 11 MB, against 0.25 s for the 113 MB
-sections. The run doesn't profile it.
+`--media` writes 2 files, both named `.docx`. The CLI reads each image's bytes to hash them for
+its name, about 1.09 GB in all, which is where the time goes: 1.3 s for 11 MB, against 0.25 s and
+0.24 s for onenote.rs's 113 MB and 161 MB sections. The run doesn't profile it.
 
 **`Large Desktop.one`** and **`Large OneDrive.one`** are `crates/parser/tests/samples/` from
 [msiemens/onenote.rs](https://github.com/msiemens/onenote.rs) (MPL-2.0) at `v2.1.0` (`727389a`),
@@ -198,14 +197,13 @@ two formats: `Large Desktop.one` in the revision-store format (file format GUID
 (`638DE92F-A6D4-4BC1-9A36-B3FC2511A5B7`), the format onenote_parser issue #48 is about. Each
 page holds 8 images, `image_heavy_1.pdf` to `_8.pdf`, each with its printout page number, and 5
 embedded PDFs: 11 distinct contents of 112,889,106 bytes, the largest 67,528,569 bytes.
-`Large OneDrive.one` is 161 MB, not the 113 MB the brief gave for both.
 
 The two reads are the same model but for the ids and the 8 images' extension.
 `Large OneDrive.one` stores `png` for each printout image, and the CLI names its file `.png`;
 `Large Desktop.one` stores none, so the CLI takes the extension of the image's filename,
-`image_heavy_<n>.pdf`, and writes the same PNG bytes as `.pdf`. That is behavior 12 as the brief
-gives it (the image's own extension, else its filename's), but a desktop printout's file is
-misnamed; processing's onenote adapter shouldn't trust a printout image's extension.
+`image_heavy_<n>.pdf`, and writes the same PNG bytes as `.pdf`. That follows the naming rule (the
+README's "Media": the image's own extension, else its filename's), but a desktop printout's file
+is misnamed; processing's onenote adapter shouldn't trust a printout image's extension.
 
 ### onenote_parser issue #48
 

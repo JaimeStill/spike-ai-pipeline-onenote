@@ -15,9 +15,9 @@ here.
 
 - `spike-ai-pipeline-onenote [--media <dir>] <input>`, which reads a OneNote `.one` section, in
   desktop or OneDrive format, a `.onetoc2` notebook, a notebook directory through its one
-  `.onetoc2`, or a `.onepkg` package, through onenote_parser 2.1.0, used unmodified, sniffed by
-  content, never by name, and writes JSON Lines of schema `"1"` to stdout, which carries them and
-  nothing else. Exit codes: 0 read, even with sections skipped; 1 stdout or a media file not
+  `.onetoc2`, or a `.onepkg` package through onenote_parser 2.1.0, used unmodified. It sniffs the
+  input by content, never by name, and writes JSON Lines of schema `"1"` to stdout, which carries
+  them and nothing else. Exit codes: 0 read, even with sections skipped; 1 stdout or a media file not
   written; 2 usage (usage on stderr); 3 refused (one reason line on stderr, nothing on stdout);
   and 4 a fault of the CLI's own. `--version` prints the bare version.
 - The initial output contract, schema `"1"`: a `notebook` line first (input kind `"section"`,

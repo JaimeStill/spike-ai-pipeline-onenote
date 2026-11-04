@@ -2,14 +2,16 @@
 
 The OneNote tool of [spike-ai-pipeline](https://github.com/JaimeStill/spike-ai-pipeline): a
 command-line utility that reads OneNote `.one` sections, from desktop OneNote 2016 and later or
-downloaded from OneDrive, `.onetoc2` notebooks, notebook directories, and `.onepkg` packages,
-through [onenote_parser](https://crates.io/crates/onenote_parser) 2.1, used unmodified, into one
-JSON model: the notebook, its section groups and sections, and each page at its latest revision,
-with its rich text, lists, tables, math, and note tags, a Markdown body, and its images, embedded
-files, and ink (recognised text, and strokes as SVG), written out as files on request.
+downloaded from OneDrive, `.onetoc2` notebooks, notebook directories, and `.onepkg` packages into
+one JSON model. It reads them through [onenote_parser](https://crates.io/crates/onenote_parser)
+2.1, used unmodified. The model holds the notebook, its section groups and sections, and each page
+at its latest revision, with its rich text, lists, tables, math, and note tags, a Markdown body,
+and its images, embedded files, and ink (recognised text, and strokes as SVG), which it writes
+out as files on request.
 
-It is published as one static musl binary each for linux-x64 and linux-arm64, which
-spike-ai-pipeline-processing runs like any other system tool. It reads files only, never
+It is published as one static musl binary each for linux-x64 and linux-arm64, built for
+spike-ai-pipeline-processing to run as a system tool; processing's `onenote` package, which will
+run it, is planned. It reads files only, never
 Microsoft 365 or the network, and calls no model.
 
 It is released by tag, `vX.Y.Z`, with a [CHANGELOG](CHANGELOG.md). Its finding for the spike's
@@ -315,8 +317,8 @@ and the time and peak resident memory of every input, median of 3:
   129 content fields (`content.json`), with every expected absence absent. There is no authored
   hand truth.
 - Every committed input reads in under 10 ms and 4.5 MiB. Interop-TestSuites' `LargeData.one`
-  (11 MB) reads in 1.30 s at 19.5 MiB; onenote.rs's `Large Desktop.one` (113 MB) and
-  `Large OneDrive.one` (161 MB) in 0.25 s at 135 MiB each.
+  (11 MB) reads in 1.30 s at 19.5 MiB; onenote.rs's `Large Desktop.one` (113 MB) in 0.25 s and
+  `Large OneDrive.one` (161 MB) in 0.24 s, at 135 MiB each.
 - onenote_parser issue #48 doesn't show at 161 MB: the OneDrive-format section peaks where its
   desktop-format twin does. It stays a limit for large, long-edited OneDrive sections.
 - An image with no stored extension is named for its filename's, as the contract says, so

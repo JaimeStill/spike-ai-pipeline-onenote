@@ -7,7 +7,8 @@ from `context/README.md`.
 - **Layout:** one Cargo crate; the CLI in `src/`, its tests in `tests/`, run against the built
   binary.
 - **Check:** `mise run check`: shellcheck, `cargo fmt --check`, `cargo clippy` with warnings
-  denied, `cargo test --locked`, and a static musl release build for this machine.
+  denied, `scripts/notices.sh` (the third-party notices against the crates the binary links),
+  `cargo test --locked`, and a static musl release build for this machine.
 - **Currency:** `mise run currency`.
 - **Goals:** the spike's tasks live in the coordinator's roadmap,
   `standards-lab/context/roadmap.toml`, under `experiment.ai.spike-ai-pipeline`. Its goal record
