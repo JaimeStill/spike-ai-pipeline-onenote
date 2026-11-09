@@ -333,7 +333,7 @@ and the time and peak resident memory of every input, median of 3:
 - No OneNote-written `.onepkg` is tested: packages need desktop OneNote on Windows, so the tests
   build their own.
 - No authored hand truth: every expectation comes from the public Interop-TestSuites (MIT) and
-  onenote.rs (MPL-2.0) fixtures. A later release adds an authored notebook.
+  onenote.rs (MPL-2.0) fixtures.
 - No desktop-format hand truth: the desktop format rests on the public files' structural checks
   alone.
 - Merged table cells aren't exposed by onenote_parser, so each cell is read as its own.
